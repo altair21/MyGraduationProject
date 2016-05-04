@@ -297,6 +297,7 @@
 				500484201CC60F5B00A61E25 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
