@@ -6,11 +6,11 @@
     },
     {
       "idiom" : "universal",
+      "filename" : "spring1.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "block.jpg",
       "scale" : "3x"
     }
   ],
