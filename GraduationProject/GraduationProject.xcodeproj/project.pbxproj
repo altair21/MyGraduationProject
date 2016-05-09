@@ -113,7 +113,7 @@
 				TargetAttributes = {
 					500484071CC60F5B00A61E25 = {
 						CreatedOnToolsVersion = 7.3;
-						DevelopmentTeam = X72NNDN3GJ;
+						DevelopmentTeam = 7ZB4J6GUHQ;
 					};
 				};
 			};
@@ -272,9 +272,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = GraduationProject/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.altair21.ZombieConga;
+				PRODUCT_BUNDLE_IDENTIFIER = com.altair21.GraduationProject;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -283,9 +284,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = GraduationProject/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.altair21.ZombieConga;
+				PRODUCT_BUNDLE_IDENTIFIER = com.altair21.GraduationProject;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
