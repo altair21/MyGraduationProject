@@ -316,12 +316,41 @@ class MakeMapScene: SKScene {
     }
     
     func doneTapped() {
-        
-        MazeFileManager.writeToFile(mazeString)
+        //FIXME: this may cause cycling reference
+        let alert = UIAlertController(title: nil, message: "地图制作完成了吗？", preferredStyle: .Alert)
+        let okBtn = UIAlertAction(title: "确定", style: .Default) { (_) in
+            self.checkValidity()
+        }
+        let cancelBtn = UIAlertAction(title: "取消", style: .Cancel, handler: nil)
+        alert.addAction(okBtn)
+        alert.addAction(cancelBtn)
+        self.view?.window?.rootViewController?.presentViewController(alert, animated: true, completion: nil)
     }
     
     func checkValidity() {
-        
+        var hasPlayer = false
+        var hasFinish = false
+        for char in mazeString.characters {
+            if char == "p" {
+                hasPlayer = true
+            } else if char == "f" {
+                hasFinish = true
+            }
+        }
+        if !hasPlayer {
+            let alert = UIAlertController(title: nil, message: "没有放置小球", preferredStyle: .Alert)
+            let cancelBtn = UIAlertAction(title: "取消", style: .Cancel, handler: nil)
+            alert.addAction(cancelBtn)
+            self.view?.window?.rootViewController?.presentViewController(alert, animated: true, completion: nil)
+        } else if !hasFinish {
+            let alert = UIAlertController(title: nil, message: "没有放置终点", preferredStyle: .Alert)
+            let cancelBtn = UIAlertAction(title: "取消", style: .Cancel, handler: nil)
+            alert.addAction(cancelBtn)
+            self.view?.window?.rootViewController?.presentViewController(alert, animated: true, completion: nil)
+        }
+        if MazeFileManager.writeToFile(mazeString) {
+            self.view?.makeToast("地图制作完成", duration: 2.0, position: ToastPosition.Center)
+        }
     }
     
 }
