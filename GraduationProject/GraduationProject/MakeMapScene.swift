@@ -8,6 +8,11 @@
 
 import SpriteKit
 
+struct MapNode {
+    var x: Int
+    var y: Int
+}
+
 class MakeMapScene: SKScene {
     var mazeString: String = ""
     var player: SKSpriteNode!
@@ -25,8 +30,12 @@ class MakeMapScene: SKScene {
     var currentSelectNodeCharacter: Character!
     var mapPlayer: SKSpriteNode!
     var mapFinish: SKSpriteNode!
+    var mapPlayerPosition: MapNode!
+    var mapFinishPosition: MapNode!
     var borderView: UIView!
     let enumNodeName = "enumNodeName"
+    
+    var lastTouchMapNode: MapNode!
     
     override func didMoveToView(view: SKView) {
         initBG()
@@ -86,13 +95,29 @@ class MakeMapScene: SKScene {
             } else if currentSelectNode == player {
                 if let mapPlayer = mapPlayer {
                     mapPlayer.removeFromParent()
+                    let offset = (21 - mapPlayerPosition.y) * 33 + mapPlayerPosition.x
+                    var index = mazeString.startIndex
+                    for _ in 0..<offset {
+                        index = index.successor()
+                    }
+                    mazeString.removeAtIndex(index)
+                    mazeString.insert(" ", atIndex: index)
                 }
                 mapPlayer = node
+                mapPlayerPosition = MapNode(x: col, y: row)
             } else if currentSelectNode == finish {
                 if let mapFinish = mapFinish {
                     mapFinish.removeFromParent()
+                    let offset = (21 - mapFinishPosition.y) * 33 + mapFinishPosition.x
+                    var index = mazeString.startIndex
+                    for _ in 0..<offset {
+                        index = index.successor()
+                    }
+                    mazeString.removeAtIndex(index)
+                    mazeString.insert(" ", atIndex: index)
                 }
                 mapFinish = node
+                mapFinishPosition = MapNode(x: col, y: row)
             }
             addChild(node)
             
@@ -104,13 +129,31 @@ class MakeMapScene: SKScene {
             mazeString.removeAtIndex(index)
             mazeString.insert(currentSelectNodeCharacter, atIndex: index)
         }
+        
+        lastTouchMapNode = MapNode(x: col, y: row)
     }
     
     func checkNodeRemove(point: CGPoint) {
+        if let lastTouchMapNode = lastTouchMapNode {
+            if lastTouchMapNode.x == Int(point.x / CGFloat(vTextureLength)) &&
+                lastTouchMapNode.y == Int(point.y / CGFloat(vTextureLength)) {
+                return
+            }
+        }
+        
         //FIXME: this may cause cycling reference
         self.enumerateChildNodesWithName(enumNodeName) { (node, _) in
             if self.interact(point, rect: node.frame) {
                 node.removeFromParent()
+                let col = Int(node.frame.origin.x / CGFloat(vTextureLength))
+                let row = Int(node.frame.origin.y / CGFloat(vTextureLength))
+                let offset = (21 - row) * 33 + col
+                var index = self.mazeString.startIndex
+                for _ in 0..<offset {
+                    index = index.successor()
+                }
+                self.mazeString.removeAtIndex(index)
+                self.mazeString.insert(" ", atIndex: index)
             }
         }
     }
