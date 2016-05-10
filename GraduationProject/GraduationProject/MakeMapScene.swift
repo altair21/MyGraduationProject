@@ -11,7 +11,7 @@ import SpriteKit
 struct MapNode {
     var x: Int
     var y: Int
-}
+}   //为方便（其实是我懒得改了），制作迷宫时x为列数，y为行数。在bfs时，x为行数，y为列数
 
 class MakeMapScene: SKScene {
     var mazeString: String = ""
@@ -360,7 +360,7 @@ class MakeMapScene: SKScene {
     
     func doneTapped() {
         //FIXME: this may cause cycling reference
-        let alert = UIAlertController(title: nil, message: "地图制作完成了吗？", preferredStyle: .Alert)
+        let alert = UIAlertController(title: nil, message: "迷宫制作完成了吗？", preferredStyle: .Alert)
         let okBtn = UIAlertAction(title: "确定", style: .Default) { (_) in
             self.checkValidity()
         }
@@ -381,19 +381,125 @@ class MakeMapScene: SKScene {
             }
         }
         if !hasPlayer {
-            let alert = UIAlertController(title: nil, message: "没有放置小球", preferredStyle: .Alert)
+            let alert = UIAlertController(title: nil, message: "迷宫没有放置小球", preferredStyle: .Alert)
             let cancelBtn = UIAlertAction(title: "取消", style: .Cancel, handler: nil)
             alert.addAction(cancelBtn)
             self.view?.window?.rootViewController?.presentViewController(alert, animated: true, completion: nil)
         } else if !hasFinish {
-            let alert = UIAlertController(title: nil, message: "没有放置终点", preferredStyle: .Alert)
+            let alert = UIAlertController(title: nil, message: "迷宫没有放置终点", preferredStyle: .Alert)
             let cancelBtn = UIAlertAction(title: "取消", style: .Cancel, handler: nil)
             alert.addAction(cancelBtn)
             self.view?.window?.rootViewController?.presentViewController(alert, animated: true, completion: nil)
         }
-        if MazeFileManager.writeToFile(mazeString) {
-            self.view?.makeToast("地图制作完成", duration: 2.0, position: ToastPosition.Center)
+        print(mazeString)
+        let bfs = BFSUtility.initWith(mazeString, playerPosition: mapPlayerPosition, finishPosition: mapFinishPosition)
+        if !bfs.checkByBFS() {
+            let alert = UIAlertController(title: nil, message: "迷宫无法走通，请重新制作", preferredStyle: .Alert)
+            let cancelBtn = UIAlertAction(title: "确定", style: .Cancel, handler: nil)
+            alert.addAction(cancelBtn)
+            self.view?.window?.rootViewController?.presentViewController(alert, animated: true, completion: nil)
+        } else {
+            if MazeFileManager.writeToFile(mazeString) {
+                self.view?.makeToast("迷宫制作完成", duration: 2.0, position: ToastPosition.Center)
+            }
         }
     }
+}
+
+class BFSUtility: NSObject {
+    var queue = Array<MapNode>()
+    var front: Int = 0, rear: Int = 1
+    var map = Array<Array<Character>>()
+    var vis = Array<Array<Int>>()
+    var playerPosition: MapNode!
+    var finishPosition: MapNode!
+    var mazeString: String!
     
+    
+    class func initWith(mazeString: String, playerPosition: MapNode, finishPosition: MapNode) -> BFSUtility {
+        let object = BFSUtility()
+        object.mazeString = mazeString
+        object.playerPosition = MapNode(x: 21 - playerPosition.y, y: playerPosition.x)
+        object.finishPosition = MapNode(x: 21 - finishPosition.y, y: finishPosition.x)
+        return object
+    }
+    
+    func checkByBFS() -> Bool {
+        var charIndex = mazeString.startIndex
+        for row in 0..<22 {
+            var mapRow = Array<Character>()
+            var visRow = Array<Int>()
+            for _ in 0..<32 {
+                visRow.append(0)
+                mapRow.append(mazeString.characters[charIndex])
+                charIndex = charIndex.successor()
+            }
+            if row < 21 {
+                charIndex = charIndex.successor()
+            }
+            vis.append(visRow)
+            map.append(mapRow)
+        }
+        
+        queue.append(playerPosition)
+        vis[playerPosition.x][playerPosition.y] = 1
+        while front < rear {
+            let tempNode = queue[front]
+            front += 1
+            
+            let newNode1 = MapNode(x: tempNode.x + 1, y: tempNode.y)
+            if canGo(newNode1) {
+                if (map[newNode1.x][newNode1.y] == "f") {
+                    return true
+                }
+                queue.append(newNode1)
+                rear += 1
+                vis[newNode1.x][newNode1.y] = 1
+            }
+            let newNode2 = MapNode(x: tempNode.x - 1, y: tempNode.y)
+            if canGo(newNode2) {
+                if (map[newNode2.x][newNode2.y] == "f") {
+                    return true
+                }
+                queue.append(newNode2)
+                rear += 1
+                vis[newNode2.x][newNode2.y] = 1
+            }
+            let newNode3 = MapNode(x: tempNode.x, y: tempNode.y + 1)
+            if canGo(newNode3) {
+                if (map[newNode3.x][newNode3.y] == "f") {
+                    return true
+                }
+                queue.append(newNode3)
+                rear += 1
+                vis[newNode3.x][newNode3.y] = 1
+            }
+            let newNode4 = MapNode(x: tempNode.x, y: tempNode.y - 1)
+            if canGo(newNode4) {
+                if (map[newNode4.x][newNode4.y] == "f") {
+                    return true
+                }
+                queue.append(newNode4)
+                rear += 1
+                vis[newNode4.x][newNode4.y] = 1
+            }
+        }
+        return false
+    }
+    
+    func canGo(node: MapNode) -> Bool {
+        if node.x > 0 && node.x < 21 &&
+            node.y > 0 && node.y < 31 &&
+            map[node.x][node.y] != "x" &&
+            map[node.x][node.y] != "v" &&
+            map[node.x][node.y] != "1" &&
+            map[node.x][node.y] != "2" &&
+            map[node.x][node.y] != "3" &&
+            map[node.x][node.y] != "4" &&
+            vis[node.x][node.y] == 0 {
+            return true
+        } else {
+            return false
+        }
+    }
 }
