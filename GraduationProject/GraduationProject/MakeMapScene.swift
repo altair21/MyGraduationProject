@@ -23,7 +23,10 @@ class MakeMapScene: SKScene {
     var doneButton: SKSpriteNode!
     var currentSelectNode: SKSpriteNode!
     var currentSelectNodeCharacter: Character!
+    var mapPlayer: SKSpriteNode!
+    var mapFinish: SKSpriteNode!
     var borderView: UIView!
+    let enumNodeName = "enumNodeName"
     
     override func didMoveToView(view: SKView) {
         initBG()
@@ -40,7 +43,7 @@ class MakeMapScene: SKScene {
             if point.y >= 704 {
                 locationInScene(touch.locationInNode(self))
             } else {
-                
+                drawAtPoint(point)
             }
             print(touch.locationInNode(self))
         } else {
@@ -48,8 +51,68 @@ class MakeMapScene: SKScene {
         }
     }
     
-    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        if let touch = touches.first {
+            let point = touch.locationInNode(self)
+            if point.y < 704 {
+                drawAtPoint(point)
+            }
+        } else {
+            return
+        }
+    }
+    
+    func drawAtPoint(point: CGPoint) {
+        if currentSelectNode == nil {
+            return
+        }
         
+        let col: Int = Int(point.x / CGFloat(vTextureLength))
+        let row: Int = Int(point.y / CGFloat(vTextureLength))
+        if (col == 0 || col == 31 || row == 0 || row == 21) {
+            return
+        }
+        
+        if currentSelectNode == eraser {
+            checkNodeRemove(point)
+        } else {
+            checkNodeRemove(point)
+            let node = SKSpriteNode(texture: currentSelectNode.texture)
+            node.name = enumNodeName
+            node.position = CGPoint(x: vTextureLength * col + vTextureLength / 2, y: vTextureLength * row + vTextureLength / 2)
+            node.size = CGSize(width: vTextureLength, height: vTextureLength)
+            if currentSelectNode == vortex {
+                node.runAction(SKAction.repeatActionForever(SKAction.rotateByAngle(CGFloat(M_PI), duration: 1.0)))
+            } else if currentSelectNode == player {
+                if let mapPlayer = mapPlayer {
+                    mapPlayer.removeFromParent()
+                }
+                mapPlayer = node
+            } else if currentSelectNode == finish {
+                if let mapFinish = mapFinish {
+                    mapFinish.removeFromParent()
+                }
+                mapFinish = node
+            }
+            addChild(node)
+            
+            let offset = (21 - row) * 33 + col
+            var index = mazeString.startIndex
+            for _ in 0..<offset {
+                index = index.successor()
+            }
+            mazeString.removeAtIndex(index)
+            mazeString.insert(currentSelectNodeCharacter, atIndex: index)
+        }
+    }
+    
+    func checkNodeRemove(point: CGPoint) {
+        //FIXME: this may cause cycling reference
+        self.enumerateChildNodesWithName(enumNodeName) { (node, _) in
+            if self.interact(point, rect: node.frame) {
+                node.removeFromParent()
+            }
+        }
     }
     
     func locationInScene(position: CGPoint) {
@@ -92,8 +155,9 @@ class MakeMapScene: SKScene {
         } else if interact(position, rect: eraser.frame) {
             initBorderView(eraser.frame)
             currentSelectNode = eraser
+            currentSelectNodeCharacter = " "
         } else if interact(position, rect: doneButton.frame) {
-            
+            doneTapped()
         }
     }
     
@@ -253,5 +317,11 @@ class MakeMapScene: SKScene {
     
     func doneTapped() {
         
+        MazeFileManager.writeToFile(mazeString)
     }
+    
+    func checkValidity() {
+        
+    }
+    
 }

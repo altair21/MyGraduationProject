@@ -14,6 +14,7 @@
 		500484151CC60F5B00A61E25 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 500484131CC60F5B00A61E25 /* Main.storyboard */; };
 		500484171CC60F5B00A61E25 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 500484161CC60F5B00A61E25 /* Assets.xcassets */; };
 		5004841A1CC60F5B00A61E25 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 500484181CC60F5B00A61E25 /* LaunchScreen.storyboard */; };
+		502CC76F1CE2237F001A1D04 /* MazeFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502CC76E1CE2237F001A1D04 /* MazeFileManager.swift */; };
 		5070A48D1CE0B439002A1895 /* MakeMapScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5070A48C1CE0B439002A1895 /* MakeMapScene.swift */; };
 		507734251CDB785E00EA32A4 /* 1.txt in Resources */ = {isa = PBXBuildFile; fileRef = 507734241CDB785E00EA32A4 /* 1.txt */; };
 /* End PBXBuildFile section */
@@ -28,6 +29,7 @@
 		500484161CC60F5B00A61E25 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		500484191CC60F5B00A61E25 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5004841B1CC60F5B00A61E25 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		502CC76E1CE2237F001A1D04 /* MazeFileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MazeFileManager.swift; sourceTree = "<group>"; };
 		5070A48C1CE0B439002A1895 /* MakeMapScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MakeMapScene.swift; sourceTree = "<group>"; };
 		507734241CDB785E00EA32A4 /* 1.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 1.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -72,6 +74,7 @@
 				500484161CC60F5B00A61E25 /* Assets.xcassets */,
 				500484181CC60F5B00A61E25 /* LaunchScreen.storyboard */,
 				5004841B1CC60F5B00A61E25 /* Info.plist */,
+				502CC76E1CE2237F001A1D04 /* MazeFileManager.swift */,
 			);
 			path = GraduationProject;
 			sourceTree = "<group>";
@@ -159,6 +162,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				500484101CC60F5B00A61E25 /* GameScene.swift in Sources */,
+				502CC76F1CE2237F001A1D04 /* MazeFileManager.swift in Sources */,
 				500484121CC60F5B00A61E25 /* GameViewController.swift in Sources */,
 				5004840C1CC60F5B00A61E25 /* AppDelegate.swift in Sources */,
 				5070A48D1CE0B439002A1895 /* MakeMapScene.swift in Sources */,
