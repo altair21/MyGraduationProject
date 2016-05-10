@@ -93,6 +93,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             score += 1
         } else if node.name == TextureType.Finish.rawValue {
             
+        } else if node.name == TextureType.Spring.rawValue {
+            player.physicsBody!.applyImpulse(CGVector(dx: physicsWorld.gravity.dx * -0.5, dy: physicsWorld.gravity.dy * -0.5))
         }
     }
     
@@ -137,7 +139,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             node.position = position
             node.size = CGSize(width: vTextureLength, height: vTextureLength)
             node.runAction(SKAction.repeatActionForever(SKAction.rotateByAngle(CGFloat(M_PI), duration: 1.0)))
-            node.physicsBody = SKPhysicsBody(circleOfRadius: node.size.width / 2)
+            node.physicsBody = SKPhysicsBody(circleOfRadius: node.size.width / 2 * 0.8)
             node.physicsBody!.dynamic = false
             node.physicsBody!.categoryBitMask = PhysicsCategory.Vortex
             node.physicsBody!.collisionBitMask = PhysicsCategory.None
@@ -170,6 +172,75 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    func initSpring(type: Int, position: CGPoint) {
+        var node: SKSpriteNode = SKSpriteNode(imageNamed: "spring1")
+        switch type {
+        case 1:
+            node = SKSpriteNode(imageNamed: "spring1")
+            node.name = TextureType.Spring.rawValue
+            node.position = CGPoint(x: position.x - CGFloat(vTextureLength) / 4, y: position.y)
+            node.size = CGSize(width: vTextureLength / 2, height: vTextureLength)
+        case 2:
+            node = SKSpriteNode(imageNamed: "spring2")
+            node.name = TextureType.Spring.rawValue
+            node.position = CGPoint(x: position.x, y: position.y + CGFloat(vTextureLength) / 4)
+            node.size = CGSize(width: vTextureLength, height: vTextureLength / 2)
+        case 3:
+            node = SKSpriteNode(imageNamed: "spring3")
+            node.name = TextureType.Spring.rawValue
+            node.position = CGPoint(x: position.x + CGFloat(vTextureLength) / 4, y: position.y)
+            node.size = CGSize(width: vTextureLength / 2, height: vTextureLength)
+        case 4:
+            node = SKSpriteNode(imageNamed: "spring4")
+            node.name = TextureType.Spring.rawValue
+            node.position = CGPoint(x: position.x, y: position.y - CGFloat(vTextureLength) / 4)
+            node.size = CGSize(width: vTextureLength, height: vTextureLength / 2)
+        default:
+            break
+        }
+        node.physicsBody = SKPhysicsBody(rectangleOfSize: node.size)
+        node.physicsBody!.dynamic = false
+        node.physicsBody!.categoryBitMask = PhysicsCategory.Spring
+        node.physicsBody!.collisionBitMask = PhysicsCategory.None
+        node.physicsBody!.contactTestBitMask = PhysicsCategory.Player
+        addChild(node)
+        initSpringBase(type, position: position)
+    }
+    
+    func initSpringBase(type: Int, position: CGPoint) {
+        var node = SKSpriteNode(imageNamed: "spring_base_1")
+        switch type {
+        case 1:
+            node = SKSpriteNode(imageNamed: "spring_base_1")
+            node.name = TextureType.Wall.rawValue
+            node.position = CGPoint(x: position.x + CGFloat(vTextureLength) / 4, y: position.y)
+            node.size = CGSize(width: vTextureLength / 2, height: vTextureLength)
+        case 2:
+            node = SKSpriteNode(imageNamed: "spring_base_2")
+            node.name = TextureType.Wall.rawValue
+            node.position = CGPoint(x: position.x, y: position.y - CGFloat(vTextureLength) / 4)
+            node.size = CGSize(width: vTextureLength, height: vTextureLength / 2)
+        case 3:
+            node = SKSpriteNode(imageNamed: "spring_base_3")
+            node.name = TextureType.Wall.rawValue
+            node.position = CGPoint(x: position.x - CGFloat(vTextureLength) / 4, y: position.y)
+            node.size = CGSize(width: vTextureLength / 2, height: vTextureLength)
+        case 4:
+            node = SKSpriteNode(imageNamed: "spring_base_4")
+            node.name = TextureType.Wall.rawValue
+            node.position = CGPoint(x: position.x, y: position.y + CGFloat(vTextureLength) / 4)
+            node.size = CGSize(width: vTextureLength, height: vTextureLength / 2)
+        default:
+            break
+        }
+        node.physicsBody = SKPhysicsBody(rectangleOfSize: node.size)
+        node.physicsBody!.dynamic = false
+        node.physicsBody!.categoryBitMask = PhysicsCategory.Wall
+        node.physicsBody!.collisionBitMask = PhysicsCategory.Player
+        node.physicsBody!.contactTestBitMask = PhysicsCategory.None
+        addChild(node)
+    }
+    
     func createPlayer() {
             player = SKSpriteNode(imageNamed: "player")
             player.name = TextureType.Player.rawValue
@@ -180,7 +251,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             player.physicsBody!.linearDamping = 0.5
             player.physicsBody!.categoryBitMask = PhysicsCategory.Player
             player.physicsBody!.collisionBitMask = PhysicsCategory.Wall | PhysicsCategory.Spring
-            player.physicsBody!.contactTestBitMask = PhysicsCategory.Star | PhysicsCategory.Vortex | PhysicsCategory.Finish
+            player.physicsBody!.contactTestBitMask = PhysicsCategory.Star | PhysicsCategory.Vortex | PhysicsCategory.Finish | PhysicsCategory.Spring
             addChild(player)
     }
     
@@ -195,13 +266,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                         
                         switch letter {
                         case "1":
-                            fallthrough
+                            initSpring(1, position: position)
                         case "2":
-                            fallthrough
+                            initSpring(2, position: position)
                         case "3":
-                            fallthrough
+                            initSpring(3, position: position)
                         case "4":
-                            fallthrough
+                            initSpring(4, position: position)
                         case "x":
                             initTexture(.Wall, position: position)
                         case "v":
