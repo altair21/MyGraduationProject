@@ -66,12 +66,12 @@
 				5004840B1CC60F5B00A61E25 /* AppDelegate.swift */,
 				5004840D1CC60F5B00A61E25 /* GameScene.sks */,
 				5004840F1CC60F5B00A61E25 /* GameScene.swift */,
+				5070A48C1CE0B439002A1895 /* MakeMapScene.swift */,
 				500484111CC60F5B00A61E25 /* GameViewController.swift */,
 				500484131CC60F5B00A61E25 /* Main.storyboard */,
 				500484161CC60F5B00A61E25 /* Assets.xcassets */,
 				500484181CC60F5B00A61E25 /* LaunchScreen.storyboard */,
 				5004841B1CC60F5B00A61E25 /* Info.plist */,
-				5070A48C1CE0B439002A1895 /* MakeMapScene.swift */,
 			);
 			path = GraduationProject;
 			sourceTree = "<group>";
