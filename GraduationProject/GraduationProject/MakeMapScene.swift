@@ -19,13 +19,10 @@ class MakeMapScene: SKScene {
     var spring2: SKSpriteNode!
     var spring3: SKSpriteNode!
     var spring4: SKSpriteNode!
-    var springBase1: SKSpriteNode!
-    var springBase2: SKSpriteNode!
-    var springBase3: SKSpriteNode!
-    var springBase4: SKSpriteNode!
     var eraser: SKSpriteNode!
     var doneButton: SKSpriteNode!
     var currentSelectNode: SKSpriteNode!
+    var currentSelectNodeCharacter: Character!
     var borderView: UIView!
     
     override func didMoveToView(view: SKView) {
@@ -42,6 +39,8 @@ class MakeMapScene: SKScene {
             let point = touch.locationInNode(self)
             if point.y >= 704 {
                 locationInScene(touch.locationInNode(self))
+            } else {
+                
             }
             print(touch.locationInNode(self))
         } else {
@@ -56,28 +55,43 @@ class MakeMapScene: SKScene {
     func locationInScene(position: CGPoint) {
         if interact(position, rect: player.frame) {
             initBorderView(player.frame)
+            currentSelectNode = player
+            currentSelectNodeCharacter = "p"
         } else if interact(position, rect: finish.frame) {
             initBorderView(finish.frame)
+            currentSelectNode = finish
+            currentSelectNodeCharacter = "f"
         } else if interact(position, rect: wall.frame) {
             initBorderView(wall.frame)
+            currentSelectNode = wall
+            currentSelectNodeCharacter = "x"
         } else if interact(position, rect: vortex.frame) {
             initBorderViewAtVortex(vortex.frame)
+            currentSelectNode = vortex
+            currentSelectNodeCharacter = "v"
         } else if interact(position, rect: star.frame) {
             initBorderView(star.frame)
-        } else if interact(position, rect: spring1.frame) ||
-            interact(position, rect: springBase1.frame) {
-            initBorderView2(1)
-        } else if interact(position, rect: spring2.frame) ||
-            interact(position, rect: springBase2.frame) {
-            initBorderView2(2)
-        } else if interact(position, rect: spring3.frame) ||
-            interact(position, rect: springBase3.frame) {
-            initBorderView2(3)
-        } else if interact(position, rect: spring4.frame) ||
-            interact(position, rect: springBase4.frame) {
-            initBorderView2(4)
+            currentSelectNode = star
+            currentSelectNodeCharacter = "s"
+        } else if interact(position, rect: spring1.frame) {
+            initBorderView(spring1.frame)
+            currentSelectNode = spring1
+            currentSelectNodeCharacter = "1"
+        } else if interact(position, rect: spring2.frame) {
+            initBorderView(spring2.frame)
+            currentSelectNode = spring2
+            currentSelectNodeCharacter = "2"
+        } else if interact(position, rect: spring3.frame) {
+            initBorderView(spring3.frame)
+            currentSelectNode = spring3
+            currentSelectNodeCharacter = "3"
+        } else if interact(position, rect: spring4.frame) {
+            initBorderView(spring4.frame)
+            currentSelectNode = spring4
+            currentSelectNodeCharacter = "4"
         } else if interact(position, rect: eraser.frame) {
             initBorderView(eraser.frame)
+            currentSelectNode = eraser
         } else if interact(position, rect: doneButton.frame) {
             
         }
@@ -99,29 +113,6 @@ class MakeMapScene: SKScene {
             view.removeFromSuperview()
         }
         let resFrame = CGRectMake(frame.origin.x - 2.5, 0, frame.size.width + 5, frame.size.height + 5)
-        borderView = UIView(frame: resFrame)
-        borderView.layer.borderColor = UIColor.yellowColor().CGColor
-        borderView.layer.borderWidth = 2.5
-        self.view?.addSubview(borderView)
-    }
-    
-    func initBorderView2(type: Int) {
-        let resFrame: CGRect!
-        switch type {
-        case 1:
-            resFrame = CGRectMake(462.5, 0, 64, 64)
-        case 2:
-            resFrame = CGRectMake(555.5, 0, 64, 64)
-        case 3:
-            resFrame = CGRectMake(648.5, 0, 64, 64)
-        case 4:
-            resFrame = CGRectMake(741.5, 0, 64, 64)
-        default:
-            resFrame = CGRectMake(0, 0, 0, 0)
-        }
-        if let view = borderView {
-            view.removeFromSuperview()
-        }
         borderView = UIView(frame: resFrame)
         borderView.layer.borderColor = UIColor.yellowColor().CGColor
         borderView.layer.borderWidth = 2.5
@@ -229,41 +220,25 @@ class MakeMapScene: SKScene {
         addChild(star)
         
         //springs
-        spring1 = SKSpriteNode(imageNamed: "spring1")
-        spring1.position = CGPoint(x: 465 + 14.75, y: 736)
-        spring1.size = CGSize(width: 29.5, height: 59)
+        spring1 = SKSpriteNode(imageNamed: "spring_node_1")
+        spring1.position = CGPoint(x: 465 + 29.5, y: 736)
+        spring1.size = CGSize(width: 59, height: 59)
         addChild(spring1)
-        springBase1 = SKSpriteNode(imageNamed: "spring_base_1")
-        springBase1.position = CGPoint(x: 465 + 44.25, y: 736)
-        springBase1.size = CGSize(width: 29.5, height: 59)
-        addChild(springBase1)
         
-        spring2 = SKSpriteNode(imageNamed: "spring2")
-        spring2.position = CGPoint(x: 558 + 29.5, y: 750.75)
-        spring2.size = CGSize(width: 59, height: 29.5)
+        spring2 = SKSpriteNode(imageNamed: "spring_node_2")
+        spring2.position = CGPoint(x: 558 + 29.5, y: 736)
+        spring2.size = CGSize(width: 59, height: 59)
         addChild(spring2)
-        springBase2 = SKSpriteNode(imageNamed: "spring_base_2")
-        springBase2.position = CGPoint(x: 558 + 29.5, y: 721.25)
-        springBase2.size = CGSize(width: 59, height: 29.5)
-        addChild(springBase2)
         
-        spring3 = SKSpriteNode(imageNamed: "spring3")
-        spring3.position = CGPoint(x: 651 + 44.25, y: 736)
-        spring3.size = CGSize(width: 29.5, height: 59)
+        spring3 = SKSpriteNode(imageNamed: "spring_node_3")
+        spring3.position = CGPoint(x: 651 + 29.5, y: 736)
+        spring3.size = CGSize(width: 59, height: 59)
         addChild(spring3)
-        springBase3 = SKSpriteNode(imageNamed: "spring_base_3")
-        springBase3.position = CGPoint(x: 651 + 14.75, y: 736)
-        springBase3.size = CGSize(width: 29.5, height: 59)
-        addChild(springBase3)
         
-        spring4 = SKSpriteNode(imageNamed: "spring4")
-        spring4.position = CGPoint(x: 744 + 29.5, y: 721.25)
-        spring4.size = CGSize(width: 59, height: 29.5)
+        spring4 = SKSpriteNode(imageNamed: "spring_node_4")
+        spring4.position = CGPoint(x: 744 + 29.5, y: 736)
+        spring4.size = CGSize(width: 59, height: 59)
         addChild(spring4)
-        springBase4 = SKSpriteNode(imageNamed: "spring_base_4")
-        springBase4.position = CGPoint(x: 744 + 29.5, y: 750.75)
-        springBase4.size = CGSize(width: 59, height: 29.5)
-        addChild(springBase4)
         
         eraser = SKSpriteNode(imageNamed: "eraser")
         eraser.position = CGPoint(x: 837 + 29.5, y: 736)
