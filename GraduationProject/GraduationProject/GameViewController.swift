@@ -10,11 +10,17 @@ import UIKit
 import SpriteKit
 
 class GameViewController: UIViewController {
+    @IBOutlet weak var backBtn: UIButton!
+    @IBOutlet weak var uploadBtn: UIButton!
+    @IBOutlet weak var playBtn: UIButton!
+    var gameScene: GameScene!
+    var isPlaying = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         if let scene = GameScene(fileNamed:"GameScene") {
+            gameScene = scene
             // Configure the view.
             let skView = self.view as! SKView
             skView.showsFPS = true
@@ -28,6 +34,40 @@ class GameViewController: UIViewController {
             scene.scaleMode = .AspectFill
             
             skView.presentScene(scene)
+        }
+        
+        let radius: CGFloat = 10.0
+        backBtn.layer.cornerRadius = radius
+        uploadBtn.layer.cornerRadius = radius
+        playBtn.layer.cornerRadius = radius
+        
+    }
+    
+    @IBAction func playTapped(sender: UIButton) {
+        playBtn.enabled = false
+        playBtn.layer.opacity = 0.3
+        isPlaying = true
+        gameScene.gameStart()
+    }
+    
+    @IBAction func uploadTapped(sender: UIButton) {
+    }
+    
+    @IBAction func backTapped(sender: UIButton) {
+        if isPlaying {
+            gameScene.gamePause()
+            let alert = UIAlertController(title: nil, message: "确定退出游戏吗？", preferredStyle: .Alert)
+            let okBtn = UIAlertAction(title: "确定", style: .Default, handler: { (_) in
+                self.navigationController?.popViewControllerAnimated(true)
+            })
+            let cancelBtn = UIAlertAction(title: "取消", style: .Cancel, handler: { (_) in
+                self.gameScene.gameStart()
+            })
+            alert.addAction(okBtn)
+            alert.addAction(cancelBtn)
+            self.presentViewController(alert, animated: true, completion: nil)
+        } else {
+            self.navigationController?.popViewControllerAnimated(true)
         }
     }
 

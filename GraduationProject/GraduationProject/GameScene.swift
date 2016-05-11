@@ -35,6 +35,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var scoreLabel: SKLabelNode!
     var timeLabel: SKLabelNode!
     var gameOver = false
+    var isPlaying = false
     var playerPosition: CGPoint!
     
     var score: Int = 0 {
@@ -59,9 +60,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
    
     override func update(currentTime: CFTimeInterval) {
-        if !gameOver {
+        if !gameOver && isPlaying {
             if let accelerometerData = motionManager.accelerometerData {
-                physicsWorld.gravity = CGVector(dx: accelerometerData.acceleration.y * -15, dy: accelerometerData.acceleration.x * 15)
+                physicsWorld.gravity = CGVector(dx: accelerometerData.acceleration.y * -20, dy: accelerometerData.acceleration.x * 20)
             }
         }
     }
@@ -78,7 +79,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if node.name == TextureType.Vortex.rawValue {
             player.physicsBody!.dynamic = false
             gameOver = true
-            score -= 10
+            score -= 1
             
             let move = SKAction.moveTo(node.position, duration: 0.25)
             let scale = SKAction.scaleTo(0.0001, duration: 0.25)
@@ -95,6 +96,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
         } else if node.name == TextureType.Spring.rawValue {
             player.physicsBody!.applyImpulse(CGVector(dx: physicsWorld.gravity.dx * -0.5, dy: physicsWorld.gravity.dy * -0.5))
+        }
+    }
+    
+    func gameStart() {
+        isPlaying = true
+        player.physicsBody!.dynamic = true
+        self.enumerateChildNodesWithName(TextureType.Vortex.rawValue) { (node, _) in
+            node.runAction(SKAction.repeatActionForever(SKAction.rotateByAngle(CGFloat(M_PI), duration: 1.0)))
+        }
+    }
+    
+    func gamePause() {
+        isPlaying = false
+        player.physicsBody!.dynamic = false
+        self.enumerateChildNodesWithName(TextureType.Vortex.rawValue) { (node, _) in
+            node.removeAllActions()
         }
     }
     
@@ -138,7 +155,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             node.name = TextureType.Vortex.rawValue
             node.position = position
             node.size = CGSize(width: vTextureLength, height: vTextureLength)
-            node.runAction(SKAction.repeatActionForever(SKAction.rotateByAngle(CGFloat(M_PI), duration: 1.0)))
             node.physicsBody = SKPhysicsBody(circleOfRadius: node.size.width / 2 * 0.8)
             node.physicsBody!.dynamic = false
             node.physicsBody!.categoryBitMask = PhysicsCategory.Vortex

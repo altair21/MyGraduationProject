@@ -34,6 +34,7 @@ class MakeMapScene: SKScene {
     var mapFinishPosition: MapNode!
     var borderView: UIView!
     let enumNodeName = "enumNodeName"
+    weak var viewController: MakeMapViewController!
     
     var lastTouchMapNode: MapNode!
     
@@ -364,8 +365,12 @@ class MakeMapScene: SKScene {
         let okBtn = UIAlertAction(title: "确定", style: .Default) { (_) in
             self.checkValidity()
         }
+        let discardBtn = UIAlertAction(title: "放弃", style: .Default) { (_) in
+            self.viewController.navigationController?.popViewControllerAnimated(true)
+        }
         let cancelBtn = UIAlertAction(title: "取消", style: .Cancel, handler: nil)
         alert.addAction(okBtn)
+        alert.addAction(discardBtn)
         alert.addAction(cancelBtn)
         self.view?.window?.rootViewController?.presentViewController(alert, animated: true, completion: nil)
     }
