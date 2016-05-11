@@ -1,20 +1,20 @@
 //
-//  GameViewController.swift
+//  MakeMapViewController.swift
 //  GraduationProject
 //
-//  Created by altair21 on 16/4/19.
-//  Copyright (c) 2016年 altair21. All rights reserved.
+//  Created by altair21 on 16/5/11.
+//  Copyright © 2016年 altair21. All rights reserved.
 //
 
 import UIKit
 import SpriteKit
 
-class GameViewController: UIViewController {
+class MakeMapViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if let scene = GameScene(fileNamed:"GameScene") {
+        if let scene = MakeMapScene(fileNamed:"GameScene") {
             // Configure the view.
             let skView = self.view as! SKView
             skView.showsFPS = true
@@ -30,11 +30,11 @@ class GameViewController: UIViewController {
             skView.presentScene(scene)
         }
     }
-
+    
     override func shouldAutorotate() -> Bool {
         return true
     }
-
+    
     override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
         if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
             return .AllButUpsideDown
@@ -45,10 +45,11 @@ class GameViewController: UIViewController {
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Release any cached data, images, etc that aren't in use.
+        // Dispose of any resources that can be recreated.
     }
-
+    
     override func prefersStatusBarHidden() -> Bool {
         return true
     }
+
 }

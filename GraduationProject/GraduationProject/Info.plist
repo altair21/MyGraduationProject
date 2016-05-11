@@ -36,5 +36,9 @@
 	<array>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>UIAppFonts</key>
+	<array>
+		<string>GOODDC__.TTF</string>
+	</array>
 </dict>
 </plist>

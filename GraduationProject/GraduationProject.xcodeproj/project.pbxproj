@@ -16,6 +16,10 @@
 		5004841A1CC60F5B00A61E25 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 500484181CC60F5B00A61E25 /* LaunchScreen.storyboard */; };
 		502CC76F1CE2237F001A1D04 /* MazeFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502CC76E1CE2237F001A1D04 /* MazeFileManager.swift */; };
 		502CC7751CE23FD6001A1D04 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502CC7741CE23FD6001A1D04 /* Toast.swift */; };
+		507095AD1CE2EE3B009AA6E7 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507095AC1CE2EE3B009AA6E7 /* MenuViewController.swift */; };
+		507095AF1CE2EFCF009AA6E7 /* GOODDC__.TTF in Resources */ = {isa = PBXBuildFile; fileRef = 507095AE1CE2EFCF009AA6E7 /* GOODDC__.TTF */; };
+		507095B11CE30EE8009AA6E7 /* MakeMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507095B01CE30EE8009AA6E7 /* MakeMapViewController.swift */; };
+		507095B31CE312BD009AA6E7 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507095B21CE312BD009AA6E7 /* AboutViewController.swift */; };
 		5070A48D1CE0B439002A1895 /* MakeMapScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5070A48C1CE0B439002A1895 /* MakeMapScene.swift */; };
 		507734251CDB785E00EA32A4 /* 1.txt in Resources */ = {isa = PBXBuildFile; fileRef = 507734241CDB785E00EA32A4 /* 1.txt */; };
 /* End PBXBuildFile section */
@@ -32,6 +36,10 @@
 		5004841B1CC60F5B00A61E25 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		502CC76E1CE2237F001A1D04 /* MazeFileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MazeFileManager.swift; sourceTree = "<group>"; };
 		502CC7741CE23FD6001A1D04 /* Toast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
+		507095AC1CE2EE3B009AA6E7 /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
+		507095AE1CE2EFCF009AA6E7 /* GOODDC__.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = GOODDC__.TTF; sourceTree = "<group>"; };
+		507095B01CE30EE8009AA6E7 /* MakeMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MakeMapViewController.swift; sourceTree = "<group>"; };
+		507095B21CE312BD009AA6E7 /* AboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		5070A48C1CE0B439002A1895 /* MakeMapScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MakeMapScene.swift; sourceTree = "<group>"; };
 		507734241CDB785E00EA32A4 /* 1.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 1.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -70,11 +78,15 @@
 				5004840B1CC60F5B00A61E25 /* AppDelegate.swift */,
 				5004840D1CC60F5B00A61E25 /* GameScene.sks */,
 				5004840F1CC60F5B00A61E25 /* GameScene.swift */,
-				5070A48C1CE0B439002A1895 /* MakeMapScene.swift */,
 				500484111CC60F5B00A61E25 /* GameViewController.swift */,
+				5070A48C1CE0B439002A1895 /* MakeMapScene.swift */,
+				507095B01CE30EE8009AA6E7 /* MakeMapViewController.swift */,
+				507095AC1CE2EE3B009AA6E7 /* MenuViewController.swift */,
+				507095B21CE312BD009AA6E7 /* AboutViewController.swift */,
 				502CC76E1CE2237F001A1D04 /* MazeFileManager.swift */,
 				502CC7741CE23FD6001A1D04 /* Toast.swift */,
 				500484131CC60F5B00A61E25 /* Main.storyboard */,
+				507095AE1CE2EFCF009AA6E7 /* GOODDC__.TTF */,
 				500484161CC60F5B00A61E25 /* Assets.xcassets */,
 				500484181CC60F5B00A61E25 /* LaunchScreen.storyboard */,
 				5004841B1CC60F5B00A61E25 /* Info.plist */,
@@ -151,6 +163,7 @@
 			files = (
 				5004840E1CC60F5B00A61E25 /* GameScene.sks in Resources */,
 				507734251CDB785E00EA32A4 /* 1.txt in Resources */,
+				507095AF1CE2EFCF009AA6E7 /* GOODDC__.TTF in Resources */,
 				5004841A1CC60F5B00A61E25 /* LaunchScreen.storyboard in Resources */,
 				500484171CC60F5B00A61E25 /* Assets.xcassets in Resources */,
 				500484151CC60F5B00A61E25 /* Main.storyboard in Resources */,
@@ -165,8 +178,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				500484101CC60F5B00A61E25 /* GameScene.swift in Sources */,
+				507095B11CE30EE8009AA6E7 /* MakeMapViewController.swift in Sources */,
 				502CC7751CE23FD6001A1D04 /* Toast.swift in Sources */,
+				507095B31CE312BD009AA6E7 /* AboutViewController.swift in Sources */,
 				502CC76F1CE2237F001A1D04 /* MazeFileManager.swift in Sources */,
+				507095AD1CE2EE3B009AA6E7 /* MenuViewController.swift in Sources */,
 				500484121CC60F5B00A61E25 /* GameViewController.swift in Sources */,
 				5004840C1CC60F5B00A61E25 /* AppDelegate.swift in Sources */,
 				5070A48D1CE0B439002A1895 /* MakeMapScene.swift in Sources */,
