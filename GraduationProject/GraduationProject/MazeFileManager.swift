@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 
 class MazeFileManager: NSObject {
     static let mazeFileManager: NSFileManager = NSFileManager.defaultManager()
@@ -34,4 +35,5 @@ class MazeFileManager: NSObject {
         let documentsDirectory = paths[0] + "/MazeFiles"
         return documentsDirectory
     }
+    
 }
