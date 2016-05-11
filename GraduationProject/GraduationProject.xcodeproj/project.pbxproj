@@ -37,7 +37,7 @@
 		502CC76E1CE2237F001A1D04 /* MazeFileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MazeFileManager.swift; sourceTree = "<group>"; };
 		502CC7741CE23FD6001A1D04 /* Toast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		507095AC1CE2EE3B009AA6E7 /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
-		507095AE1CE2EFCF009AA6E7 /* GOODDC__.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = GOODDC__.TTF; sourceTree = "<group>"; };
+		507095AE1CE2EFCF009AA6E7 /* GOODDC__.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; name = GOODDC__.TTF; path = ../GOODDC__.TTF; sourceTree = "<group>"; };
 		507095B01CE30EE8009AA6E7 /* MakeMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MakeMapViewController.swift; sourceTree = "<group>"; };
 		507095B21CE312BD009AA6E7 /* AboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		5070A48C1CE0B439002A1895 /* MakeMapScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MakeMapScene.swift; sourceTree = "<group>"; };
@@ -74,19 +74,13 @@
 		5004840A1CC60F5B00A61E25 /* GraduationProject */ = {
 			isa = PBXGroup;
 			children = (
-				507734231CDB785E00EA32A4 /* Levels */,
+				507095B81CE31520009AA6E7 /* Utilities */,
+				507095B71CE31514009AA6E7 /* Manager */,
+				507095B61CE314EE009AA6E7 /* GameScenes */,
+				507095B51CE314CD009AA6E7 /* ViewControllers */,
+				507734231CDB785E00EA32A4 /* Resources */,
 				5004840B1CC60F5B00A61E25 /* AppDelegate.swift */,
-				5004840D1CC60F5B00A61E25 /* GameScene.sks */,
-				5004840F1CC60F5B00A61E25 /* GameScene.swift */,
-				500484111CC60F5B00A61E25 /* GameViewController.swift */,
-				5070A48C1CE0B439002A1895 /* MakeMapScene.swift */,
-				507095B01CE30EE8009AA6E7 /* MakeMapViewController.swift */,
-				507095AC1CE2EE3B009AA6E7 /* MenuViewController.swift */,
-				507095B21CE312BD009AA6E7 /* AboutViewController.swift */,
-				502CC76E1CE2237F001A1D04 /* MazeFileManager.swift */,
-				502CC7741CE23FD6001A1D04 /* Toast.swift */,
 				500484131CC60F5B00A61E25 /* Main.storyboard */,
-				507095AE1CE2EFCF009AA6E7 /* GOODDC__.TTF */,
 				500484161CC60F5B00A61E25 /* Assets.xcassets */,
 				500484181CC60F5B00A61E25 /* LaunchScreen.storyboard */,
 				5004841B1CC60F5B00A61E25 /* Info.plist */,
@@ -94,11 +88,50 @@
 			path = GraduationProject;
 			sourceTree = "<group>";
 		};
-		507734231CDB785E00EA32A4 /* Levels */ = {
+		507095B51CE314CD009AA6E7 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				500484111CC60F5B00A61E25 /* GameViewController.swift */,
+				507095B01CE30EE8009AA6E7 /* MakeMapViewController.swift */,
+				507095AC1CE2EE3B009AA6E7 /* MenuViewController.swift */,
+				507095B21CE312BD009AA6E7 /* AboutViewController.swift */,
+			);
+			name = ViewControllers;
+			sourceTree = "<group>";
+		};
+		507095B61CE314EE009AA6E7 /* GameScenes */ = {
+			isa = PBXGroup;
+			children = (
+				5004840D1CC60F5B00A61E25 /* GameScene.sks */,
+				5004840F1CC60F5B00A61E25 /* GameScene.swift */,
+				5070A48C1CE0B439002A1895 /* MakeMapScene.swift */,
+			);
+			name = GameScenes;
+			sourceTree = "<group>";
+		};
+		507095B71CE31514009AA6E7 /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				502CC76E1CE2237F001A1D04 /* MazeFileManager.swift */,
+			);
+			name = Manager;
+			sourceTree = "<group>";
+		};
+		507095B81CE31520009AA6E7 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				502CC7741CE23FD6001A1D04 /* Toast.swift */,
+			);
+			name = Utilities;
+			sourceTree = "<group>";
+		};
+		507734231CDB785E00EA32A4 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
 				507734241CDB785E00EA32A4 /* 1.txt */,
+				507095AE1CE2EFCF009AA6E7 /* GOODDC__.TTF */,
 			);
+			name = Resources;
 			path = Levels;
 			sourceTree = "<group>";
 		};
