@@ -361,21 +361,25 @@ class MakeMapScene: SKScene {
     
     func doneTapped() {
         //FIXME: this may cause cycling reference
-        let alert = UIAlertController(title: nil, message: "迷宫制作完成了吗？", preferredStyle: .Alert)
-        let okBtn = UIAlertAction(title: "确定", style: .Default) { (_) in
-            self.checkValidity()
+        let alert = UIAlertController(title: nil, message: "请选择要进行的操作：", preferredStyle: .Alert)
+        let okBtn = UIAlertAction(title: "完成", style: .Default) { (_) in
+            self.checkValidity(uploadMaze: false)
         }
-        let discardBtn = UIAlertAction(title: "放弃", style: .Default) { (_) in
+        let uploadBtn = UIAlertAction(title: "完成并上传", style: .Default) { (_) in
+            self.checkValidity(uploadMaze: true)
+        }
+        let discardBtn = UIAlertAction(title: "放弃并退出", style: .Default) { (_) in
             self.viewController.navigationController?.popViewControllerAnimated(true)
         }
         let cancelBtn = UIAlertAction(title: "取消", style: .Cancel, handler: nil)
         alert.addAction(okBtn)
+        alert.addAction(uploadBtn)
         alert.addAction(discardBtn)
         alert.addAction(cancelBtn)
         self.view?.window?.rootViewController?.presentViewController(alert, animated: true, completion: nil)
     }
     
-    func checkValidity() {
+    func checkValidity(uploadMaze uploadMaze: Bool) {
         var hasPlayer = false
         var hasFinish = false
         for char in mazeString.characters {
@@ -404,9 +408,8 @@ class MakeMapScene: SKScene {
             alert.addAction(cancelBtn)
             self.view?.window?.rootViewController?.presentViewController(alert, animated: true, completion: nil)
         } else {
-            if MazeFileManager.writeToFile(mazeString) {
-                self.view?.makeToast("迷宫制作完成", duration: 2.0, position: ToastPosition.Center)
-            }
+            MazeFileManager.writeToFile(mazeString, upload: uploadMaze)
+            self.viewController.navigationController?.popViewControllerAnimated(true)
         }
     }
 }

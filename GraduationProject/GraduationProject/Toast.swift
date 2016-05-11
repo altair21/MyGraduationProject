@@ -32,6 +32,10 @@ public enum ToastPosition {
     case Bottom
 }
 
+func showCenterToast(str: String) {
+    UIView.currentView().makeToast(str, duration: 2.0, position: .Center)
+}
+
 /**
  Toast is a Swift extension that adds toast notifications to the `UIView` object class.
  It is intended to be simple, lightweight, and easy to use. Most toast notifications 
@@ -55,6 +59,10 @@ public extension UIView {
         static var ActiveToast  = "CSToastActiveToastKey"
         static var ActivityView = "CSToastActivityViewKey"
         static var Queue        = "CSToastQueueKey"
+    }
+    
+    class func currentView() -> UIView {
+        return UIApplication.sharedApplication().keyWindow!.rootViewController!.view
     }
     
     /**
