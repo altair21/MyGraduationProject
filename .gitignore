@@ -1,3 +1,5 @@
 *.xcuserstate
 *.xcuserdatad
 GraduationProject/Pods
+Server/src/AppServer/upload
+*.sqlite3
