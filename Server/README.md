@@ -14,7 +14,9 @@
 
 ### 相关API
 
-- 文件上传：`/disk/`	#POST表单形式
+- **POST**-文件上传：`/upload/`	#POST表单形式
+- **GET**-获取文件列表： `/getList/` #以JSON形式返回
+- **GET**-下载文件： `/download/?filename=###` #参数传带扩展名的文件名
 
 ---
 
@@ -31,5 +33,7 @@
 ### 参考资料
 
 - [上传文件](http://www.cnblogs.com/fnng/p/3740274.html)
-
+- [获取列表](http://stackoverflow.com/questions/2428092/creating-a-json-response-using-django-and-python)
+- [下载文件](http://www.jianshu.com/p/2ce715671340)
+- [官方WIKI](https://github.com/Alamofire/Alamofire/blob/master/README.md)
 

@@ -11,7 +11,7 @@ import json
 class UserForm(forms.Form):
 	headImg = forms.FileField()
 
-def register(request):
+def upload(request):
 	if request.method == "POST":
 		uf = UserForm(request.POST,request.FILES)
 		if uf.is_valid():
@@ -39,3 +39,14 @@ def getList(request):
 		response_data['result'] = 'success'
 		response_data['files'] = arr
 		return HttpResponse(json.dumps(response_data), content_type="application/json")
+		
+def download(request):
+	str = request.REQUEST.get('filename','xxx')
+	path = os.getcwd()
+	filePath = os.path.join(path, 'upload', str)
+	if os.path.isfile(filePath):
+		with open(filePath) as f:
+			stream = f.read()
+		return HttpResponse(stream)
+	else:
+		return HttpResponse('no file', status=404)
