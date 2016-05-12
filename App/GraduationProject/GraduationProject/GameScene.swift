@@ -18,6 +18,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var isPlaying = false
     var playerPosition: CGPoint!
     var levelPath: String!
+    weak var viewController: GameViewController!
     
     var score: Int = 0 {
         didSet {
@@ -74,7 +75,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             node.removeFromParent()
             score += 1
         } else if node.name == TextureType.Finish.rawValue {
-            
+            gamePassed(node)
         } else if node.name == TextureType.Spring.rawValue {
             player.physicsBody!.applyImpulse(CGVector(dx: physicsWorld.gravity.dx * -0.5, dy: physicsWorld.gravity.dy * -0.5))
         }
@@ -94,6 +95,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.enumerateChildNodesWithName(TextureType.Vortex.rawValue) { (node, _) in
             node.removeAllActions()
         }
+    }
+    
+    func gamePassed(node: SKNode) {
+        gameOver = true
+        let scale = SKAction.scaleTo(0.0001, duration: 0.25)
+        let remove = SKAction.removeFromParent()
+        let sequence = SKAction.sequence([scale, remove])
+        player.runAction(sequence)
+        node.runAction(sequence)
+        
+        viewController.gamePassed()
     }
     
     func initBG() {

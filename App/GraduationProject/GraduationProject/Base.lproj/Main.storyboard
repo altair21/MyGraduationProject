@@ -131,6 +131,13 @@
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="恭 喜 过 关" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Zea-bK-rpn">
+                                <rect key="frame" x="207" y="280" width="610" height="208"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="98"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -139,6 +146,7 @@
                     <size key="freeformSize" width="1024" height="768"/>
                     <connections>
                         <outlet property="backBtn" destination="fUF-Og-Nr4" id="sOd-Ki-k8q"/>
+                        <outlet property="passLabel" destination="Zea-bK-rpn" id="tcB-tb-HXS"/>
                         <outlet property="playBtn" destination="Lv3-Ci-Hej" id="qpg-MF-z03"/>
                         <outlet property="uploadBtn" destination="xEB-xn-bQv" id="dH3-dh-xdj"/>
                     </connections>

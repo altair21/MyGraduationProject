@@ -13,6 +13,7 @@ class GameViewController: UIViewController {
     @IBOutlet weak var backBtn: UIButton!
     @IBOutlet weak var uploadBtn: UIButton!
     @IBOutlet weak var playBtn: UIButton!
+    @IBOutlet weak var passLabel: UILabel!
     var gameScene: GameScene!
     var isPlaying = false
     var mazeFilePath: String!
@@ -25,6 +26,7 @@ class GameViewController: UIViewController {
         if let scene = GameScene(fileNamed:"GameScene") {
             gameScene = scene
             gameScene.levelPath = mazeFilePath
+            gameScene.viewController = self
             // Configure the view.
             let skView = self.view as! SKView
             skView.showsFPS = true
@@ -78,6 +80,28 @@ class GameViewController: UIViewController {
         } else {
             self.navigationController?.popViewControllerAnimated(true)
         }
+    }
+    
+    func gamePassed() {
+        let view = UIView(frame: self.view.frame)
+        view.backgroundColor = UIColor.blackColor()
+        view.layer.opacity = 0.0
+        self.view.addSubview(view)
+        
+        self.view.bringSubviewToFront(passLabel)
+        passLabel.layer.opacity = 0.0
+        passLabel.hidden = false
+        
+        UIView.animateWithDuration(1.5) { 
+            self.passLabel.layer.opacity = 1.0
+            view.layer.opacity = 0.7
+        }
+        
+        self.performSelector(#selector(delayPop), withObject: nil, afterDelay: 3)
+    }
+    
+    func delayPop() {
+        self.navigationController?.popViewControllerAnimated(true)
     }
 
     override func shouldAutorotate() -> Bool {

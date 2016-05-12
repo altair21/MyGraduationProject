@@ -16,6 +16,8 @@ App的后台使用django，做了三个简单的API，分别是上传文件、�
 
 1. 美化GameListViewController
 2. 添加Multipeer Connectivity Framework，提供近距离分享地图文件的支持（走到这一步添加这个鸡肋的功能我内心是拒绝的，但年轻时的我在毕设任务书上写了这项）
+3. 保存关卡分数
+4. 自定义转场动画
 
 
 
