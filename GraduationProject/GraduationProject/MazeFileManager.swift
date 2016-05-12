@@ -10,10 +10,16 @@ import UIKit
 import Alamofire
 
 class MazeFileManager: NSObject {
-    static let mazeFileManager: NSFileManager = NSFileManager.defaultManager()
-    static let uploadAPI = "http://127.0.0.1:8000/disk/"
+    private static let sharedInstance = MazeFileManager()
+    class var sharedManager: MazeFileManager {
+        return sharedInstance
+    }
     
-    class func writeToFile(text: String, upload uploadFlag: Bool) -> Bool {
+    let mazeFileManager: NSFileManager = NSFileManager.defaultManager()
+    let APIupload = "http://127.0.0.1:8000/disk/"
+    let APIgetListAPI = "http://127.0.0.1:8000/getList/"
+    
+    func writeToFile(text: String, upload uploadFlag: Bool) -> Bool {
         let directoryPath = getMazeFilesDirectory() as String
         if !mazeFileManager.fileExistsAtPath(directoryPath) {
             try! mazeFileManager.createDirectoryAtPath(directoryPath, withIntermediateDirectories: true, attributes: nil)
@@ -38,16 +44,16 @@ class MazeFileManager: NSObject {
         return res
     }
     
-    class func getMazeFilesDirectory() -> NSString {
+    func getMazeFilesDirectory() -> NSString {
         let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
         let documentsDirectory = paths[0] + "/MazeFiles"
         return documentsDirectory
     }
     
-    class func uploadFile(path: NSURL, filename: String) {
+    func uploadFile(path: NSURL, filename: String) {
         Alamofire.upload(
             .POST,
-            uploadAPI,
+            APIupload,
             multipartFormData: { (multipartFormData) in
                 multipartFormData.appendBodyPart(fileURL: path, name: "headImg")
             }) { (encodingResult) in
