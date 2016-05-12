@@ -15,6 +15,7 @@ class GameViewController: UIViewController {
     @IBOutlet weak var playBtn: UIButton!
     var gameScene: GameScene!
     var isPlaying = false
+    var mazeFilePath: String!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +24,7 @@ class GameViewController: UIViewController {
 
         if let scene = GameScene(fileNamed:"GameScene") {
             gameScene = scene
+            gameScene.levelPath = mazeFilePath
             // Configure the view.
             let skView = self.view as! SKView
             skView.showsFPS = true
@@ -43,6 +45,10 @@ class GameViewController: UIViewController {
         uploadBtn.layer.cornerRadius = radius
         playBtn.layer.cornerRadius = radius
         
+    }
+    
+    func setMazeFile(filePath: String) {
+        mazeFilePath = filePath
     }
     
     @IBAction func playTapped(sender: UIButton) {

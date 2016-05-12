@@ -449,7 +449,7 @@
 			baseConfigurationReference = 9C37CA0DC08AC273A8123FCD /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Bohao Chen (7ZB4J6GUHQ)";
 				INFOPLIST_FILE = GraduationProject/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.altair21.GraduationProject;

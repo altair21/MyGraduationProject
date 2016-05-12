@@ -16,11 +16,12 @@ class MazeFileManager: NSObject {
     }
     
     let mazeFileManager: NSFileManager = NSFileManager.defaultManager()
-    let APIupload = "http://127.0.0.1:8000/disk/"
-    let APIgetListAPI = "http://127.0.0.1:8000/getList/"
+    let APIupload = serverAddress + "upload/"
+    let APIgetList = serverAddress + "getList/"
+    let APIdownload = serverAddress + "download/"
     
     func writeToFile(text: String, upload uploadFlag: Bool) -> Bool {
-        let directoryPath = getMazeFilesDirectory() as String
+        let directoryPath = getMazeFilesDirectory()
         if !mazeFileManager.fileExistsAtPath(directoryPath) {
             try! mazeFileManager.createDirectoryAtPath(directoryPath, withIntermediateDirectories: true, attributes: nil)
         }
@@ -44,16 +45,33 @@ class MazeFileManager: NSObject {
         return res
     }
     
-    func getMazeFilesDirectory() -> NSString {
+    func getLocalFilesList() -> Array<String> {
+        let dirEnum = mazeFileManager.enumeratorAtPath(getMazeFilesDirectory())
+        var path = dirEnum?.nextObject()
+        var resArr = Array<String>()
+        while path != nil {
+            print(path)
+            resArr.append(path as! String)
+            path = dirEnum?.nextObject()
+        }
+        return resArr
+    }
+    
+    func getFileFullPath(fileName: String) -> String {
+        return self.getMazeFilesDirectory() + "/" + fileName
+    }
+    
+    func getMazeFilesDirectory() -> String {
         let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
         let documentsDirectory = paths[0] + "/MazeFiles"
+        if !mazeFileManager.fileExistsAtPath(documentsDirectory) {
+            try! mazeFileManager.createDirectoryAtPath(documentsDirectory, withIntermediateDirectories: true, attributes: nil)
+        }
         return documentsDirectory
     }
     
     func uploadFile(path: NSURL, filename: String) {
-        Alamofire.upload(
-            .POST,
-            APIupload,
+        Alamofire.upload(.POST, APIupload,
             multipartFormData: { (multipartFormData) in
                 multipartFormData.appendBodyPart(fileURL: path, name: "headImg")
             }) { (encodingResult) in
@@ -75,10 +93,24 @@ class MazeFileManager: NSObject {
     }
     
     func getFileList(completion completion: Response<AnyObject, NSError> -> Void) {
-        Alamofire.request(.GET, APIgetListAPI, parameters: nil)
+        Alamofire.request(.GET, APIgetList, parameters: nil)
             .responseJSON { response in
                 completion(response)
         }
+    }
+    
+    func download(fileName: String) {
+        var resPath: NSURL!
+        let requestURL = APIdownload + "?filename=" + fileName
+        Alamofire.download(.GET, requestURL,
+            destination: { (temporaryURL, response) in
+                
+            let directoryURL = NSURL(fileURLWithPath: self.getMazeFilesDirectory())
+            resPath = directoryURL.URLByAppendingPathComponent(fileName)
+            print(directoryURL.URLByAppendingPathComponent(fileName))
+            return resPath
+                
+        })
     }
     
 }

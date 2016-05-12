@@ -394,11 +394,13 @@ class MakeMapScene: SKScene {
             let cancelBtn = UIAlertAction(title: "取消", style: .Cancel, handler: nil)
             alert.addAction(cancelBtn)
             self.view?.window?.rootViewController?.presentViewController(alert, animated: true, completion: nil)
+            return
         } else if !hasFinish {
             let alert = UIAlertController(title: nil, message: "迷宫没有放置终点", preferredStyle: .Alert)
             let cancelBtn = UIAlertAction(title: "取消", style: .Cancel, handler: nil)
             alert.addAction(cancelBtn)
             self.view?.window?.rootViewController?.presentViewController(alert, animated: true, completion: nil)
+            return
         }
         print(mazeString)
         let bfs = BFSUtility.initWith(mazeString, playerPosition: mapPlayerPosition, finishPosition: mapFinishPosition)

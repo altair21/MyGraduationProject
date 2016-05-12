@@ -15,13 +15,25 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        mazeTitle = MazeFileManager.sharedManager.getLocalFilesList()
         MazeFileManager.sharedManager.getFileList { response in
             if let JSON = response.result.value {
                 if JSON["result"] as! String == "success" {
-                    self.mazeTitle = JSON["files"] as! Array
+                    let tempArr: Array<String> = JSON["files"] as! Array
+                    for title in tempArr {
+                        if !self.mazeTitle.contains(title) {
+                            MazeFileManager.sharedManager.download(title)
+                        }
+                    }
+                    self.mazeTitle = self.mazeTitle + tempArr
+                    
+                    //去重，原谅我用这么奇怪的姿势
+                    let tempSet = Set(self.mazeTitle)
+                    self.mazeTitle = Array(tempSet)
+                    
                     self.tableView.reloadData()
                 }
-                print("JSON: \(JSON)")
+//                print("JSON: \(JSON)")
             }
         }
         
@@ -49,7 +61,10 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
+        MazeFileManager.sharedManager.getLocalFilesList()
+        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier(storyboardGameViewController) as! GameViewController
+        vc.setMazeFile(MazeFileManager.sharedManager.getFileFullPath(self.mazeTitle[indexPath.item]))
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     override func prefersStatusBarHidden() -> Bool {

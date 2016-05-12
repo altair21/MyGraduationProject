@@ -9,10 +9,11 @@
 import Foundation
 import UIKit
 
+let serverAddress = "http://127.0.0.1:8000/"
 let vTextureLength = 32
 let vMenuBtnCornerRadius: CGFloat = 25.0
 
-let segueGameListPushToGame = "GameListPushToGame"
+let storyboardGameViewController = "GameViewController"
 
 let cellGameListTableViewCell = "GameListTableViewCell"
 

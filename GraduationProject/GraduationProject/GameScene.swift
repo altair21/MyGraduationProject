@@ -17,6 +17,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var gameOver = false
     var isPlaying = false
     var playerPosition: CGPoint!
+    var levelPath: String!
     
     var score: Int = 0 {
         didSet {
@@ -252,37 +253,35 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func loadLevel() {
-        if let levelPath = NSBundle.mainBundle().pathForResource("1", ofType: "txt") {
-            if let levelString = try? String(contentsOfFile: levelPath, usedEncoding: nil) {
-                let lines = levelString.componentsSeparatedByString("\n")
-                
-                for (row, line) in lines.reverse().enumerate() {
-                    for (column, letter) in line.characters.enumerate() {
-                        let position = CGPoint(x: vTextureLength * column + vTextureLength / 2, y: vTextureLength * row + vTextureLength / 2)
+        if let levelString = try? String(contentsOfFile: levelPath, usedEncoding: nil) {
+            let lines = levelString.componentsSeparatedByString("\n")
+            
+            for (row, line) in lines.reverse().enumerate() {
+                for (column, letter) in line.characters.enumerate() {
+                    let position = CGPoint(x: vTextureLength * column + vTextureLength / 2, y: vTextureLength * row + vTextureLength / 2)
+                    
+                    switch letter {
+                    case "1":
+                        initSpring(1, position: position)
+                    case "2":
+                        initSpring(2, position: position)
+                    case "3":
+                        initSpring(3, position: position)
+                    case "4":
+                        initSpring(4, position: position)
+                    case "x":
+                        initTexture(.Wall, position: position)
+                    case "v":
+                        initTexture(.Vortex, position: position)
+                    case "s":
+                        initTexture(.Star, position: position)
+                    case "f":
+                        initTexture(.Finish, position: position)
+                    case "p":
+                        playerPosition = position
+                        initTexture(.Player, position: position)
+                    default: break
                         
-                        switch letter {
-                        case "1":
-                            initSpring(1, position: position)
-                        case "2":
-                            initSpring(2, position: position)
-                        case "3":
-                            initSpring(3, position: position)
-                        case "4":
-                            initSpring(4, position: position)
-                        case "x":
-                            initTexture(.Wall, position: position)
-                        case "v":
-                            initTexture(.Vortex, position: position)
-                        case "s":
-                            initTexture(.Star, position: position)
-                        case "f":
-                            initTexture(.Finish, position: position)
-                        case "p":
-                            playerPosition = position
-                            initTexture(.Player, position: position)
-                        default: break
-                            
-                        }
                     }
                 }
             }
