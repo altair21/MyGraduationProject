@@ -40,7 +40,7 @@ class MazeFileManager: NSObject {
             showCenterToast("迷宫制作失败")
         }
         if res  && uploadFlag {
-            uploadFile(filePath, filename: fileName)
+            uploadFile(filePath)
         }
         return res
     }
@@ -70,7 +70,7 @@ class MazeFileManager: NSObject {
         return documentsDirectory
     }
     
-    func uploadFile(path: NSURL, filename: String) {
+    func uploadFile(path: NSURL) {
         Alamofire.upload(.POST, APIupload,
             multipartFormData: { (multipartFormData) in
                 multipartFormData.appendBodyPart(fileURL: path, name: "headImg")

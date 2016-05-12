@@ -32,7 +32,7 @@ class GameViewController: UIViewController {
             
             /* Sprite Kit applies additional optimizations to improve rendering performance */
             skView.ignoresSiblingOrder = true
-            skView.showsPhysics = true
+//            skView.showsPhysics = true
             
             /* Set the scale mode to scale to fit the window */
             scene.scaleMode = .AspectFill
@@ -59,6 +59,7 @@ class GameViewController: UIViewController {
     }
     
     @IBAction func uploadTapped(sender: UIButton) {
+        MazeFileManager.sharedManager.uploadFile(NSURL(fileURLWithPath: mazeFilePath))
     }
     
     @IBAction func backTapped(sender: UIButton) {
