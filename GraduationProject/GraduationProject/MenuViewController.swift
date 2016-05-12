@@ -8,7 +8,6 @@
 
 import UIKit
 
-let vMenuBtnCornerRadius: CGFloat = 25.0
 class MenuViewController: UIViewController {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var startBtn: UIButton!
@@ -18,11 +17,15 @@ class MenuViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.navigationController?.navigationBarHidden = true
         titleLabel.font = UIFont(name: "GoodDog Cool", size: 100.0)
         startBtn.layer.cornerRadius = vMenuBtnCornerRadius
         makeMapBtn.layer.cornerRadius = vMenuBtnCornerRadius
         aboutBtn.layer.cornerRadius = vMenuBtnCornerRadius
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.navigationBarHidden = true
     }
 
     override func didReceiveMemoryWarning() {

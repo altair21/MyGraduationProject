@@ -9,26 +9,6 @@
 import SpriteKit
 import CoreMotion
 
-enum TextureType: String {
-    case Player = "player"
-    case Wall = "wall"
-    case Vortex = "vortex"
-    case Star = "star"
-    case Finish = "finish"
-    case Spring = "spring"  //占位
-}
-
-struct PhysicsCategory {
-    static let None:   UInt32 = 0
-    static let Player: UInt32 = 0b1 //1
-    static let Wall:   UInt32 = 0b10 //2
-    static let Star:   UInt32 = 0b100 //4
-    static let Vortex: UInt32 = 0b1000 //8
-    static let Finish: UInt32 = 0b10000 //16
-    static let Spring: UInt32 = 0b100000 //32
-}
-let vTextureLength = 32
-
 class GameScene: SKScene, SKPhysicsContactDelegate {
     var player: SKSpriteNode!
     var motionManager: CMMotionManager!

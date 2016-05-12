@@ -74,4 +74,11 @@ class MazeFileManager: NSObject {
         }
     }
     
+    func getFileList(completion completion: Response<AnyObject, NSError> -> Void) {
+        Alamofire.request(.GET, APIgetListAPI, parameters: nil)
+            .responseJSON { response in
+                completion(response)
+        }
+    }
+    
 }

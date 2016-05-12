@@ -18,6 +18,8 @@ class GameViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.navigationController?.navigationBarHidden = true
 
         if let scene = GameScene(fileNamed:"GameScene") {
             gameScene = scene
