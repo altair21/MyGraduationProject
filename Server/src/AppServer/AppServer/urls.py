@@ -10,4 +10,5 @@ urlpatterns = patterns('',
 
     url(r'^admin/', include(admin.site.urls)),
 	url(r'^disk/', 'disk.views.register'),
+    url(r'^getList/', 'disk.views.getList'),
 )
