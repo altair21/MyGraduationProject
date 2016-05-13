@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-let serverAddress = "http://127.0.0.1:8000/"
+let serverAddress = "http://120.27.100.126:8080/"
 let vTextureLength = 32
 let vMenuBtnCornerRadius: CGFloat = 25.0
 
