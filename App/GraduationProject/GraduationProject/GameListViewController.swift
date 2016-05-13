@@ -15,6 +15,14 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
+        tableView.tableFooterView = UIView()
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.navigationBarHidden = false
+        
         mazeTitle = MazeFileManager.sharedManager.getLocalFilesList()
         MazeFileManager.sharedManager.getFileList { response in
             if let JSON = response.result.value {
@@ -33,16 +41,9 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
                     
                     self.tableView.reloadData()
                 }
-//                print("JSON: \(JSON)")
+                //                print("JSON: \(JSON)")
             }
         }
-        
-        tableView.tableFooterView = UIView()
-    }
-    
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        self.navigationController?.navigationBarHidden = false
     }
 
     override func didReceiveMemoryWarning() {

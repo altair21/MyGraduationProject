@@ -18,6 +18,12 @@ def upload(request):
 			# 获取表单信息
 			headImg = uf.cleaned_data['headImg']
 			# 写入数据库
+			path = os.getcwd()
+			filePath = os.path.join(path, 'upload')
+			for file in os.listdir(filePath):
+				if file == headImg.name:
+					return HttpResponse('upload ok!')
+
 			user = User()
 			user.headImg = headImg
 			user.save()
