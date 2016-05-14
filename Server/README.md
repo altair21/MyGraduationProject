@@ -36,4 +36,6 @@
 - [获取列表](http://stackoverflow.com/questions/2428092/creating-a-json-response-using-django-and-python)
 - [下载文件](http://www.jianshu.com/p/2ce715671340)
 - [官方WIKI](https://github.com/Alamofire/Alamofire/blob/master/README.md)
+- [部署](http://www.jianshu.com/p/80393ae41a5f)
+
 
