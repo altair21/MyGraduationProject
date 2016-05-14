@@ -206,24 +206,13 @@ class MakeMapScene: SKScene {
     }
     
     func interact(point: CGPoint, rect: CGRect) -> Bool {
-        if point.y >= 704 {
-            if point.x >= CGRectGetMinX(rect) &&
-                point.x <= CGRectGetMaxX(rect) &&
-                point.y >= CGRectGetMinY(rect) &&
-                point.y <= CGRectGetMaxY(rect) {
-                return true
-            } else {
-                return false
-            }
+        if point.x >= CGRectGetMinX(rect) &&
+            point.x <= CGRectGetMaxX(rect) &&
+            point.y >= CGRectGetMinY(rect) &&
+            point.y <= CGRectGetMaxY(rect) {
+            return true
         } else {
-            if point.x >= rect.origin.x &&
-                point.x <= rect.origin.x + CGFloat(vTextureLength) &&
-                point.y >= rect.origin.y &&
-                point.y <= rect.origin.y + CGFloat(vTextureLength) {
-                return true
-            } else {
-                return false
-            }
+            return false
         }
     }
     
