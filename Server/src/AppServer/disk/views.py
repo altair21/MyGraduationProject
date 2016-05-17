@@ -37,14 +37,20 @@ def getList(request):
 		path = os.getcwd()
 		filePath = os.path.join(path, 'upload')
 		arr = []
-		for file in os.listdir(filePath):
-			if file.startswith('.'):
-				continue
-			arr.append(file)
-		response_data = {}
-		response_data['result'] = 'success'
-		response_data['files'] = arr
-		return HttpResponse(json.dumps(response_data), content_type="application/json")
+		try:
+			for file in os.listdir(filePath):
+				if file.startswith('.'):
+					continue
+				arr.append(file)
+			response_data = {}
+			response_data['result'] = 'success'
+			response_data['files'] = arr
+			return HttpResponse(json.dumps(response_data), content_type="application/json")
+		except OSError:
+			response_data = {}
+			response_data['result'] = 'failure'
+			response_data['files'] = {}
+			return HttpResponse(json.dumps(response_data), content_type="application/json")
 		
 def download(request):
 	str = request.REQUEST.get('filename','xxx')
