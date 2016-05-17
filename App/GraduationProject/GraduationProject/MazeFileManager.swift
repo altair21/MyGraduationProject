@@ -27,7 +27,12 @@ class MazeFileManager: NSObject {
         }
         
         var res = true
-        let fileName = NSUUID().UUIDString + ".txt"
+        let date = NSDate()
+        let formatter = NSDateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        let dateStr = formatter.stringFromDate(date)
+        let fileName = dateStr + " " + NSUUID().UUIDString + ".txt"
+        print(fileName)
         let filePath = NSURL(fileURLWithPath: directoryPath).URLByAppendingPathComponent(fileName)
         do {
             try text.writeToURL(filePath, atomically: true, encoding: NSUTF8StringEncoding)
