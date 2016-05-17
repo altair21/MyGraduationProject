@@ -148,7 +148,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             node.name = TextureType.Vortex.rawValue
             node.position = position
             node.size = CGSize(width: vTextureLength, height: vTextureLength)
-            node.physicsBody = SKPhysicsBody(circleOfRadius: node.size.width / 2 * 0.8)
+            node.physicsBody = SKPhysicsBody(circleOfRadius: node.size.width / 2 * 0.75)
             node.physicsBody!.dynamic = false
             node.physicsBody!.categoryBitMask = PhysicsCategory.Vortex
             node.physicsBody!.collisionBitMask = PhysicsCategory.None
@@ -255,7 +255,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             player.name = TextureType.Player.rawValue
             player.position = playerPosition
             player.size = CGSize(width: vTextureLength, height: vTextureLength)
-            player.physicsBody = SKPhysicsBody(circleOfRadius: player.size.width / 2 * 0.8)
+            player.physicsBody = SKPhysicsBody(circleOfRadius: player.size.width / 2 * 0.65)
             player.physicsBody!.allowsRotation = true
             player.physicsBody!.linearDamping = 0.5
             player.physicsBody!.categoryBitMask = PhysicsCategory.Player
