@@ -34,6 +34,7 @@ class MakeMapScene: SKScene {
     var mapFinishPosition: MapNode!
     var borderView: UIView!
     let enumNodeName = "enumNodeName"
+    var customQueue = dispatch_queue_create("com.altair21.queue", DISPATCH_QUEUE_SERIAL)
     weak var viewController: MakeMapViewController!
     
     var lastTouchMapNode: MapNode!
@@ -96,42 +97,37 @@ class MakeMapScene: SKScene {
             } else if currentSelectNode == player {
                 if let mapPlayer = mapPlayer {
                     mapPlayer.removeFromParent()
-                    let offset = (21 - mapPlayerPosition.y) * 33 + mapPlayerPosition.x
-                    var index = mazeString.startIndex
-                    for _ in 0..<offset {
-                        index = index.successor()
-                    }
-                    mazeString.removeAtIndex(index)
-                    mazeString.insert(" ", atIndex: index)
+                    updateMazeString(mapPlayerPosition, character: " ")
                 }
                 mapPlayer = node
                 mapPlayerPosition = MapNode(x: col, y: row)
             } else if currentSelectNode == finish {
                 if let mapFinish = mapFinish {
                     mapFinish.removeFromParent()
-                    let offset = (21 - mapFinishPosition.y) * 33 + mapFinishPosition.x
-                    var index = mazeString.startIndex
-                    for _ in 0..<offset {
-                        index = index.successor()
-                    }
-                    mazeString.removeAtIndex(index)
-                    mazeString.insert(" ", atIndex: index)
+                    updateMazeString(mapFinishPosition, character: " ")
                 }
                 mapFinish = node
                 mapFinishPosition = MapNode(x: col, y: row)
             }
             addChild(node)
             
-            let offset = (21 - row) * 33 + col
-            var index = mazeString.startIndex
-            for _ in 0..<offset {
-                index = index.successor()
-            }
-            mazeString.removeAtIndex(index)
-            mazeString.insert(currentSelectNodeCharacter, atIndex: index)
+            let tempNode = MapNode(x: col, y: row)
+            updateMazeString(tempNode, character: currentSelectNodeCharacter)
         }
         
         lastTouchMapNode = MapNode(x: col, y: row)
+    }
+    
+    func updateMazeString(position: MapNode, character: Character) {
+        let offset = (21 - position.y) * 33 + position.x
+        var index = mazeString.startIndex
+        for _ in 0..<offset {
+            index = index.successor()
+        }
+        dispatch_sync(customQueue) { 
+            self.mazeString.removeAtIndex(index)
+            self.mazeString.insert(character, atIndex: index)
+        }
     }
     
     func checkNodeRemove(point: CGPoint) {
