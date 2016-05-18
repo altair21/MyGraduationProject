@@ -403,6 +403,7 @@ class BFSUtility: NSObject {
     var vis = Array<Array<Int>>()
     var playerPosition: MapNode!
     var finishPosition: MapNode!
+    var dir = [0, 1, 0, -1, -1, 0, 1, 0]
     var mazeString: String!
     
     
@@ -437,41 +438,16 @@ class BFSUtility: NSObject {
             let tempNode = queue[front]
             front += 1
             
-            let newNode1 = MapNode(x: tempNode.x + 1, y: tempNode.y)
-            if canGo(newNode1) {
-                if (map[newNode1.x][newNode1.y] == "f") {
-                    return true
+            for i in 0..<4 {
+                let newNode = MapNode(x: tempNode.x + dir[i*2], y: tempNode.y + dir[i*2+1])
+                if canGo(newNode) {
+                    if map[newNode.x][newNode.y] == "f" {
+                        return true
+                    }
+                    queue.append(newNode)
+                    rear += 1
+                    vis[newNode.x][newNode.y] = 1
                 }
-                queue.append(newNode1)
-                rear += 1
-                vis[newNode1.x][newNode1.y] = 1
-            }
-            let newNode2 = MapNode(x: tempNode.x - 1, y: tempNode.y)
-            if canGo(newNode2) {
-                if (map[newNode2.x][newNode2.y] == "f") {
-                    return true
-                }
-                queue.append(newNode2)
-                rear += 1
-                vis[newNode2.x][newNode2.y] = 1
-            }
-            let newNode3 = MapNode(x: tempNode.x, y: tempNode.y + 1)
-            if canGo(newNode3) {
-                if (map[newNode3.x][newNode3.y] == "f") {
-                    return true
-                }
-                queue.append(newNode3)
-                rear += 1
-                vis[newNode3.x][newNode3.y] = 1
-            }
-            let newNode4 = MapNode(x: tempNode.x, y: tempNode.y - 1)
-            if canGo(newNode4) {
-                if (map[newNode4.x][newNode4.y] == "f") {
-                    return true
-                }
-                queue.append(newNode4)
-                rear += 1
-                vis[newNode4.x][newNode4.y] = 1
             }
         }
         return false
