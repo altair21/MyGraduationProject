@@ -131,34 +131,10 @@ class MakeMapScene: SKScene {
     }
     
     func checkNodeRemove(point: CGPoint) {
-        if let lastTouchMapNode = lastTouchMapNode {
-            if lastTouchMapNode.x == Int(point.x / CGFloat(vTextureLength)) &&
-                lastTouchMapNode.y == Int(point.y / CGFloat(vTextureLength)) {
-                return
-            }
-        }
-        
-        //FIXME: this may cause cycling reference
-        self.enumerateChildNodesWithName(enumNodeName) { (node, _) in
-            let centerWidth = (CGRectGetMinX(node.frame) + CGRectGetMaxX(node.frame)) / 2
-            let centerHeight = (CGRectGetMinY(node.frame) + CGRectGetMaxY(node.frame)) / 2
-            let length = CGFloat(vTextureLength)
-            let tempX = floor(centerWidth - length / 2 + 0.5)
-            let tempY = floor(centerHeight - length / 2 + 0.5)
-            let tempRect = CGRect(x: tempX, y: tempY, width: length, height: length)
-            if self.interact(point, rect: tempRect) {
-                print("interact\(node.frame)")
-                print(tempRect)
+        let nodes = nodesAtPoint(point)
+        for node in nodes {
+            if node.name == enumNodeName {
                 node.removeFromParent()
-//                let col = Int(node.frame.origin.x / CGFloat(vTextureLength))
-//                let row = Int(node.frame.origin.y / CGFloat(vTextureLength))
-//                let offset = (21 - row) * 33 + col
-//                var index = self.mazeString.startIndex
-//                for _ in 0..<offset {
-//                    index = index.successor()
-//                }
-//                self.mazeString.removeAtIndex(index)
-//                self.mazeString.insert(" ", atIndex: index)
             }
         }
     }
