@@ -19,9 +19,11 @@ class MazeFileManager: NSObject {
     let APIupload = serverAddress + "upload/"
     let APIgetList = serverAddress + "getList/"
     let APIdownload = serverAddress + "download/"
+    let localFileDir = "/LocalFiles"
+    let downloadFileDir = "/DownloadFiles"
     
     func writeToFile(text: String, upload uploadFlag: Bool, writeFileSuccess: () -> Void, writeFileFailure: () -> Void, uploadSuccess: () -> Void, uploadFailure: () -> Void) -> Bool {
-        let directoryPath = getMazeFilesDirectory()
+        let directoryPath = getMazeFilesDirectory(isLocalFile: true)
         if !mazeFileManager.fileExistsAtPath(directoryPath) {
             try! mazeFileManager.createDirectoryAtPath(directoryPath, withIntermediateDirectories: true, attributes: nil)
         }
@@ -59,7 +61,7 @@ class MazeFileManager: NSObject {
     }
     
     func getLocalFilesList() -> Array<String> {
-        let dirEnum = mazeFileManager.enumeratorAtPath(getMazeFilesDirectory())
+        let dirEnum = mazeFileManager.enumeratorAtPath(getMazeFilesDirectory(isLocalFile: true))
         var path = dirEnum?.nextObject()
         var resArr = Array<String>()
         while path != nil {
@@ -70,13 +72,18 @@ class MazeFileManager: NSObject {
         return resArr
     }
     
-    func getFileFullPath(fileName: String) -> String {
-        return self.getMazeFilesDirectory() + "/" + fileName
+    func getFileFullPath(fileName: String, isLocalFile localFile: Bool) -> String {
+        return self.getMazeFilesDirectory(isLocalFile: localFile) + "/" + fileName
     }
     
-    func getMazeFilesDirectory() -> String {
+    func getMazeFilesDirectory(isLocalFile localFile: Bool) -> String {
         let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
-        let documentsDirectory = paths[0] + "/MazeFiles"
+        var documentsDirectory = paths[0]
+        if localFile {
+            documentsDirectory = documentsDirectory + localFileDir
+        } else {
+            documentsDirectory = documentsDirectory + downloadFileDir
+        }
         if !mazeFileManager.fileExistsAtPath(documentsDirectory) {
             try! mazeFileManager.createDirectoryAtPath(documentsDirectory, withIntermediateDirectories: true, attributes: nil)
         }
@@ -132,7 +139,7 @@ class MazeFileManager: NSObject {
         Alamofire.download(.GET, requestURL,
             destination: { (temporaryURL, response) in
                 
-            let directoryURL = NSURL(fileURLWithPath: self.getMazeFilesDirectory())
+            let directoryURL = NSURL(fileURLWithPath: self.getMazeFilesDirectory(isLocalFile: false))
             resPath = directoryURL.URLByAppendingPathComponent(fileName)
             print(directoryURL.URLByAppendingPathComponent(fileName))
             return resPath
