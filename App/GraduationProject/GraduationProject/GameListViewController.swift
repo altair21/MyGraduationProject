@@ -24,8 +24,8 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
         self.navigationController?.navigationBarHidden = false
         
         mazeTitle = MazeFileManager.sharedManager.getLocalFilesList()
-        MazeFileManager.sharedManager.getFileList { response in
-            if let JSON = response.result.value {
+        MazeFileManager.sharedManager.getFileList({ (result) in
+            if let JSON = result.value {
                 if JSON["result"] as! String == "success" {
                     let tempArr: Array<String> = JSON["files"] as! Array
                     for title in tempArr {
@@ -41,8 +41,10 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
                     
                     self.tableView.reloadData()
                 }
-                //                print("JSON: \(JSON)")
+//                print("JSON: \(JSON)")
             }
+        }) { (error) in
+            print(error)
         }
     }
 

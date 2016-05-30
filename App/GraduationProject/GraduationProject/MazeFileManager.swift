@@ -20,7 +20,7 @@ class MazeFileManager: NSObject {
     let APIgetList = serverAddress + "getList/"
     let APIdownload = serverAddress + "download/"
     
-    func writeToFile(text: String, upload uploadFlag: Bool) -> Bool {
+    func writeToFile(text: String, upload uploadFlag: Bool, writeFileSuccess: () -> Void, writeFileFailure: () -> Void, uploadSuccess: () -> Void, uploadFailure: () -> Void) -> Bool {
         let directoryPath = getMazeFilesDirectory()
         if !mazeFileManager.fileExistsAtPath(directoryPath) {
             try! mazeFileManager.createDirectoryAtPath(directoryPath, withIntermediateDirectories: true, attributes: nil)
@@ -37,15 +37,23 @@ class MazeFileManager: NSObject {
         do {
             try text.writeToURL(filePath, atomically: true, encoding: NSUTF8StringEncoding)
             if !uploadFlag {
-                showCenterToast("迷宫制作完成")
+                dispatch_async(dispatch_get_main_queue(), { 
+                    writeFileSuccess()
+                })
             }
         } catch let error as NSError {
             print(error.description)
             res = false
-            showCenterToast("迷宫制作失败")
+            dispatch_async(dispatch_get_main_queue(), { 
+                writeFileFailure()
+            })
         }
         if res  && uploadFlag {
-            uploadFile(filePath)
+            uploadFile(filePath, uploadSuccess: { 
+                uploadSuccess()
+            }, uploadFailure: {
+                uploadFailure()
+            })
         }
         return res
     }
@@ -75,7 +83,7 @@ class MazeFileManager: NSObject {
         return documentsDirectory
     }
     
-    func uploadFile(path: NSURL) {
+    func uploadFile(path: NSURL, uploadSuccess: () -> Void, uploadFailure: () -> Void) {
         Alamofire.upload(.POST, APIupload,
             multipartFormData: { (multipartFormData) in
                 multipartFormData.appendBodyPart(fileURL: path, name: "headImg")
@@ -85,22 +93,36 @@ class MazeFileManager: NSObject {
                     upload.responseString(completionHandler: { (response) in
                         print(response)
                         if response.description.rangeOfString("upload ok") != nil {
-                            showCenterToast("迷宫上传成功")
+                            dispatch_async(dispatch_get_main_queue(), { 
+                                uploadSuccess()
+                            })
                         } else {
-                            showCenterToast("迷宫上传失败")
+                            dispatch_async(dispatch_get_main_queue(), { 
+                                uploadFailure()
+                            })
                         }
                     })
                 case .Failure(let encodingError):
-                    showCenterToast("迷宫上传失败")
+                    dispatch_async(dispatch_get_main_queue(), { 
+                        uploadFailure()
+                    })
                     print(encodingError)
                 }
         }
     }
     
-    func getFileList(completion completion: Response<AnyObject, NSError> -> Void) {
+    func getFileList(success: Result<AnyObject, NSError> -> Void, failure: NSError -> Void) {
         Alamofire.request(.GET, APIgetList, parameters: nil)
             .responseJSON { response in
-                completion(response)
+                if response.result.error == nil {
+                    dispatch_async(dispatch_get_main_queue(), {
+                        success(response.result)
+                    })
+                } else {
+                    dispatch_async(dispatch_get_main_queue(), { 
+                        failure(response.result.error!)
+                    })
+                }
         }
     }
     
