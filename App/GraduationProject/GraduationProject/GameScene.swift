@@ -76,8 +76,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             score += 1
         } else if node.name == TextureType.Finish.rawValue {
             gamePassed(node)
-        } else if node.name == TextureType.Spring.rawValue {
-            player.physicsBody!.applyImpulse(CGVector(dx: physicsWorld.gravity.dx * -0.5, dy: physicsWorld.gravity.dy * -0.5))
         }
     }
     
@@ -210,8 +208,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         node.physicsBody = SKPhysicsBody(rectangleOfSize: node.size)
         node.physicsBody!.dynamic = false
         node.physicsBody!.categoryBitMask = PhysicsCategory.Spring
-        node.physicsBody!.collisionBitMask = PhysicsCategory.None
-        node.physicsBody!.contactTestBitMask = PhysicsCategory.Player
+        node.physicsBody!.collisionBitMask = PhysicsCategory.Player
+        node.physicsBody!.contactTestBitMask = PhysicsCategory.None
+        node.physicsBody!.restitution = 0.85
         addChild(node)
         initSpringBase(type, position: position)
     }
@@ -260,7 +259,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             player.physicsBody!.linearDamping = 0.5
             player.physicsBody!.categoryBitMask = PhysicsCategory.Player
             player.physicsBody!.collisionBitMask = PhysicsCategory.Wall | PhysicsCategory.Spring
-            player.physicsBody!.contactTestBitMask = PhysicsCategory.Star | PhysicsCategory.Vortex | PhysicsCategory.Finish | PhysicsCategory.Spring
+            player.physicsBody!.contactTestBitMask = PhysicsCategory.Star | PhysicsCategory.Vortex | PhysicsCategory.Finish
             addChild(player)
     }
     
