@@ -26,6 +26,7 @@
 		507095B31CE312BD009AA6E7 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507095B21CE312BD009AA6E7 /* AboutViewController.swift */; };
 		5070A48D1CE0B439002A1895 /* MakeMapScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5070A48C1CE0B439002A1895 /* MakeMapScene.swift */; };
 		507734251CDB785E00EA32A4 /* 1.txt in Resources */ = {isa = PBXBuildFile; fileRef = 507734241CDB785E00EA32A4 /* 1.txt */; };
+		50B2656B1CFC9F4900F14DAA /* DynamicMaskSegmentSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B2656A1CFC9F4900F14DAA /* DynamicMaskSegmentSwitch.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +51,7 @@
 		507095B21CE312BD009AA6E7 /* AboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		5070A48C1CE0B439002A1895 /* MakeMapScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MakeMapScene.swift; sourceTree = "<group>"; };
 		507734241CDB785E00EA32A4 /* 1.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 1.txt; sourceTree = "<group>"; };
+		50B2656A1CFC9F4900F14DAA /* DynamicMaskSegmentSwitch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamicMaskSegmentSwitch.swift; sourceTree = "<group>"; };
 		52F3C2EFACA3292FC573E225 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C37CA0DC08AC273A8123FCD /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -161,6 +163,7 @@
 			isa = PBXGroup;
 			children = (
 				502CC7741CE23FD6001A1D04 /* Toast.swift */,
+				50B2656A1CFC9F4900F14DAA /* DynamicMaskSegmentSwitch.swift */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -322,6 +325,7 @@
 				5004840C1CC60F5B00A61E25 /* AppDelegate.swift in Sources */,
 				50594B131CE4790F004FF99A /* GlobalFile.swift in Sources */,
 				5070A48D1CE0B439002A1895 /* MakeMapScene.swift in Sources */,
+				50B2656B1CFC9F4900F14DAA /* DynamicMaskSegmentSwitch.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

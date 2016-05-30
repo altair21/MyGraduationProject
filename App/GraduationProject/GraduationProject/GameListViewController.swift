@@ -8,12 +8,23 @@
 
 import UIKit
 
-class GameListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class GameListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, DynamicMaskSegmentSwitchDelegate {
     var mazeTitle = Array<String>()
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var switcher: DynamicMaskSegmentSwitch!
+    @IBOutlet weak var backBtn: UIButton!
+    @IBOutlet weak var refreshBtn: UIButton!
+    @IBOutlet weak var refreshSwitch: UISwitch!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let configure = DynamicMaskSegmentSwitchConfigure(highlightedColor: .orangeColor(), normalColor: .whiteColor(), items: ["本地地图","服务器地图"])
+        switcher.configure = configure
+        switcher.delegate = self
+        
+        backBtn.layer.cornerRadius = 10.0
+        refreshBtn.layer.cornerRadius = 10.0
         
         
         tableView.tableFooterView = UIView()
@@ -21,7 +32,6 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.navigationBarHidden = false
         
         mazeTitle = MazeFileManager.sharedManager.getLocalFilesList()
         MazeFileManager.sharedManager.getFileList({ (result) in
@@ -53,6 +63,16 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
         // Dispose of any resources that can be recreated.
     }
     
+    @IBAction func refreshSwitchChanged(sender: UISwitch) {
+    }
+    
+    @IBAction func refreshBtnTapped(sender: UIButton) {
+    }
+    
+    @IBAction func backBtnTapped(sender: UIButton) {
+        self.navigationController?.popViewControllerAnimated(true)
+    }
+    
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return mazeTitle.count
     }
@@ -66,12 +86,16 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         MazeFileManager.sharedManager.getLocalFilesList()
         let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier(storyboardGameViewController) as! GameViewController
-        vc.setMazeFile(MazeFileManager.sharedManager.getFileFullPath(self.mazeTitle[indexPath.item]))
+        vc.setMazeFile(MazeFileManager.sharedManager.getFileFullPath(self.mazeTitle[indexPath.item], isLocalFile: true))
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
     override func prefersStatusBarHidden() -> Bool {
         return true
+    }
+    
+    func switcher(switcher: DynamicMaskSegmentSwitch, didSelectAtIndex index: Int) {
+        print(index)
     }
 
 }
