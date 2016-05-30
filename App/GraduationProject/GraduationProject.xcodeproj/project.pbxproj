@@ -219,6 +219,7 @@
 				TargetAttributes = {
 					500484071CC60F5B00A61E25 = {
 						CreatedOnToolsVersion = 7.3;
+						DevelopmentTeam = 7ZB4J6GUHQ;
 					};
 				};
 			};
@@ -436,13 +437,13 @@
 			baseConfigurationReference = 19D4A16D5AA0E03D342032B3 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Bohao Chen (QE5KJL7PKG)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = GraduationProject/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.altair21.GraduationProject;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "a9a5c2ca-7ba2-4e73-9266-8bd1cad55ce4";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -452,13 +453,13 @@
 			baseConfigurationReference = 9C37CA0DC08AC273A8123FCD /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Bohao Chen (7ZB4J6GUHQ)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = GraduationProject/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.altair21.GraduationProject;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "a9a5c2ca-7ba2-4e73-9266-8bd1cad55ce4";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
