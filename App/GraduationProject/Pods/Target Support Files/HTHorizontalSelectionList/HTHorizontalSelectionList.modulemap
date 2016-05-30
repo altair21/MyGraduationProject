@@ -1,0 +1,6 @@
+framework module HTHorizontalSelectionList {
+  umbrella header "HTHorizontalSelectionList-umbrella.h"
+
+  export *
+  module * { export * }
+}
