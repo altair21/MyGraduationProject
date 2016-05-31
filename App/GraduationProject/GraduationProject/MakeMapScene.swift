@@ -390,7 +390,7 @@ class MakeMapScene: SKScene {
             alert.addAction(cancelBtn)
             self.view?.window?.rootViewController?.presentViewController(alert, animated: true, completion: nil)
         } else {
-            MazeFileManager.sharedManager.writeToFile(mazeString, upload: uploadMaze, writeFileSuccess: { 
+            MazeFileManager.sharedManager.writeToFile(mazeString, upload: uploadMaze, writeFileSuccess: {
                 showCenterToast("迷宫制作成功")
             }, writeFileFailure: {
                 showCenterToast("迷宫制作失败")

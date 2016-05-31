@@ -86,8 +86,7 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
         let cell = tableView.dequeueReusableCellWithIdentifier(cellGameListTableViewCell) as! GameListTableViewCell
         cell.backgroundColor = UIColor.clearColor()
         cell.contentView.transform = CGAffineTransformMakeRotation(CGFloat(M_PI) / 2)
-        cell.setupView()
-        print(cell.frame)
+        cell.setupView(MazeFileManager.sharedManager.getFileFullPath(self.mazeTitle[indexPath.item], isLocalFile: true))
         return cell
     }
     

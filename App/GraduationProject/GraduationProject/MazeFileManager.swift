@@ -33,7 +33,8 @@ class MazeFileManager: NSObject {
         let formatter = NSDateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
         let dateStr = formatter.stringFromDate(date)
-        let fileName = dateStr + " " + NSUUID().UUIDString + ".txt"
+        let preName = dateStr + " " + NSUUID().UUIDString
+        let fileName = preName + ".txt"
         print(fileName)
         let filePath = NSURL(fileURLWithPath: directoryPath).URLByAppendingPathComponent(fileName)
         do {
@@ -51,7 +52,7 @@ class MazeFileManager: NSObject {
             })
         }
         if res  && uploadFlag {
-            uploadFile(filePath, uploadSuccess: { 
+            uploadFile(filePath: filePath, uploadSuccess: {
                 uploadSuccess()
             }, uploadFailure: {
                 uploadFailure()
@@ -90,7 +91,7 @@ class MazeFileManager: NSObject {
         return documentsDirectory
     }
     
-    func uploadFile(path: NSURL, uploadSuccess: () -> Void, uploadFailure: () -> Void) {
+    func uploadFile(filePath path: NSURL, uploadSuccess: () -> Void, uploadFailure: () -> Void) {
         Alamofire.upload(.POST, APIupload,
             multipartFormData: { (multipartFormData) in
                 multipartFormData.appendBodyPart(fileURL: path, name: "headImg")
