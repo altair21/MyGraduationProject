@@ -61,8 +61,8 @@ class MazeFileManager: NSObject {
         return res
     }
     
-    func getLocalFilesList() -> Array<String> {
-        let dirEnum = mazeFileManager.enumeratorAtPath(getMazeFilesDirectory(isLocalFile: true))
+    func getLocalFilesList(isLocalDir isLocalDir: Bool) -> Array<String> {
+        let dirEnum = mazeFileManager.enumeratorAtPath(getMazeFilesDirectory(isLocalFile: isLocalDir))
         var path = dirEnum?.nextObject()
         var resArr = Array<String>()
         while path != nil {

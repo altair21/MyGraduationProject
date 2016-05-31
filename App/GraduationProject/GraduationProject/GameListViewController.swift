@@ -9,7 +9,11 @@
 import UIKit
 
 class GameListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, DynamicMaskSegmentSwitchDelegate {
+    let kRefreshValueOnDisk = "kRefreshValueOnDisk"
+    
     var mazeTitle = Array<String>()
+    var localMazeTitle = Array<String>()
+    var remoteMazeTitle = Array<String>()
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var switcher: DynamicMaskSegmentSwitch!
     @IBOutlet weak var backBtn: UIButton!
@@ -34,21 +38,34 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        mazeTitle = MazeFileManager.sharedManager.getLocalFilesList()
+        localMazeTitle = MazeFileManager.sharedManager.getLocalFilesList(isLocalDir: true)
+        remoteMazeTitle = MazeFileManager.sharedManager.getLocalFilesList(isLocalDir: false)
+        
+        if shouldUpdateFile() {
+            refreshRemoteFile()
+        }
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    func refreshRemoteFile() {
         MazeFileManager.sharedManager.getFileList({ (result) in
             if let JSON = result.value {
                 if JSON["result"] as! String == "success" {
                     let tempArr: Array<String> = JSON["files"] as! Array
                     for title in tempArr {
-                        if !self.mazeTitle.contains(title) {
+                        if !self.localMazeTitle.contains(title) {
+                            self.remoteMazeTitle.append(title)
                             MazeFileManager.sharedManager.download(title)
                         }
                     }
-                    self.mazeTitle = self.mazeTitle + tempArr
                     
                     //去重，原谅我用这么奇怪的姿势
-                    let tempSet = Set(self.mazeTitle)
-                    self.mazeTitle = Array(tempSet)
+                    let tempSet = Set(self.remoteMazeTitle)
+                    self.remoteMazeTitle = Array(tempSet)
                     
                     self.tableView.reloadData()
                 }
@@ -58,13 +75,17 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
             print(error)
         }
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    func shouldUpdateFile() -> Bool {
+        if let res = NSUserDefaults.standardUserDefaults().objectForKey(kRefreshValueOnDisk) as? Bool{
+            return res
+        } else {
+            return refreshSwitch.on
+        }
     }
     
     @IBAction func refreshSwitchChanged(sender: UISwitch) {
+        NSUserDefaults.standardUserDefaults().setBool(refreshSwitch.on, forKey: kRefreshValueOnDisk)
     }
     
     @IBAction func refreshBtnTapped(sender: UIButton) {
@@ -75,7 +96,11 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return mazeTitle.count
+        if switcher.currentIndex == 0 {
+            return localMazeTitle.count
+        } else {
+            return remoteMazeTitle.count
+        }
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -86,14 +111,21 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
         let cell = tableView.dequeueReusableCellWithIdentifier(cellGameListTableViewCell) as! GameListTableViewCell
         cell.backgroundColor = UIColor.clearColor()
         cell.contentView.transform = CGAffineTransformMakeRotation(CGFloat(M_PI) / 2)
-        cell.setupView(MazeFileManager.sharedManager.getFileFullPath(self.mazeTitle[indexPath.item], isLocalFile: true))
+        if switcher.currentIndex == 0 {
+            cell.setupView(MazeFileManager.sharedManager.getFileFullPath(self.localMazeTitle[indexPath.item], isLocalFile: true))
+        } else {
+            cell.setupView(MazeFileManager.sharedManager.getFileFullPath(self.remoteMazeTitle[indexPath.item], isLocalFile: false))
+        }
         return cell
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        MazeFileManager.sharedManager.getLocalFilesList()
         let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier(storyboardGameViewController) as! GameViewController
-        vc.setMazeFile(MazeFileManager.sharedManager.getFileFullPath(self.mazeTitle[indexPath.item], isLocalFile: true))
+        if switcher.currentIndex == 0 {
+            vc.setMazeFile(MazeFileManager.sharedManager.getFileFullPath(self.localMazeTitle[indexPath.item], isLocalFile: true))
+        } else {
+            vc.setMazeFile(MazeFileManager.sharedManager.getFileFullPath(self.remoteMazeTitle[indexPath.item], isLocalFile: false))
+        }
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -103,6 +135,7 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
     
     func switcher(switcher: DynamicMaskSegmentSwitch, didSelectAtIndex index: Int) {
         print(index)
+        tableView.reloadData()
     }
 
 }

@@ -51,6 +51,7 @@
 		507095B21CE312BD009AA6E7 /* AboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		5070A48C1CE0B439002A1895 /* MakeMapScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MakeMapScene.swift; sourceTree = "<group>"; };
 		507734241CDB785E00EA32A4 /* 1.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 1.txt; sourceTree = "<group>"; };
+		50A072EF1CFDD50F002F7979 /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; };
 		50B2656A1CFC9F4900F14DAA /* DynamicMaskSegmentSwitch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamicMaskSegmentSwitch.swift; sourceTree = "<group>"; };
 		52F3C2EFACA3292FC573E225 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C37CA0DC08AC273A8123FCD /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
@@ -109,6 +110,7 @@
 				500484161CC60F5B00A61E25 /* Assets.xcassets */,
 				500484181CC60F5B00A61E25 /* LaunchScreen.storyboard */,
 				5004841B1CC60F5B00A61E25 /* Info.plist */,
+				50A072EF1CFDD50F002F7979 /* MyPlayground.playground */,
 			);
 			path = GraduationProject;
 			sourceTree = "<group>";
