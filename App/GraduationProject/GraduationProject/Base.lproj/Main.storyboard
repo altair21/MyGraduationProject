@@ -86,11 +86,11 @@
                                 </connections>
                             </tableView>
                             <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="doge1" id="EtB-8o-KRi">
-                                <rect key="frame" x="268" y="337" width="509" height="272"/>
+                                <rect key="frame" x="229" y="316" width="587" height="314"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="doge2" id="Udu-UR-nNl">
-                                <rect key="frame" x="268" y="337" width="509" height="272"/>
+                                <rect key="frame" x="229" y="316" width="587" height="314"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                         </subviews>
