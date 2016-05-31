@@ -26,7 +26,8 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
         backBtn.layer.cornerRadius = 10.0
         refreshBtn.layer.cornerRadius = 10.0
         
-        
+        tableView.transform = CGAffineTransformMakeRotation(-CGFloat(M_PI) / CGFloat(2))
+        tableView.frame = CGRect(x: 0, y: 230, width: tableView.frame.size.width, height: tableView.frame.size.height)
         tableView.tableFooterView = UIView()
     }
     
@@ -77,9 +78,16 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
         return mazeTitle.count
     }
     
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return CGFloat(720)
+    }
+    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(cellGameListTableViewCell) as! GameListTableViewCell
-        cell.titleLabel.text = mazeTitle[indexPath.item]
+        cell.backgroundColor = UIColor.clearColor()
+        cell.contentView.transform = CGAffineTransformMakeRotation(CGFloat(M_PI) / 2)
+        cell.setupView()
+        print(cell.frame)
         return cell
     }
     

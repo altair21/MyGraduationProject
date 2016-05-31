@@ -9,8 +9,7 @@
 import UIKit
 
 class GameListTableViewCell: UITableViewCell {
-    @IBOutlet weak var titleLabel: UILabel!
-
+    @IBOutlet weak var BGView: UIView!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -20,6 +19,14 @@ class GameListTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+    }
+    
+    func setupView() {
+        let previewZone = UIView(frame: CGRect(x: 40, y: 0, width: 640, height: 440))
+        let previewZoneBG = UIImageView(image: UIImage(named: "background"))
+        previewZoneBG.frame = previewZone.frame
+        previewZone.addSubview(previewZoneBG)
+        BGView.addSubview(previewZone)
     }
     
 }
