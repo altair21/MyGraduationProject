@@ -32,7 +32,7 @@
                                     <action selector="backBtnTapped:" destination="WAZ-JN-ay1" eventType="touchUpInside" id="ULN-xu-pw1"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="ZDr-OT-wwv">
+                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="ZDr-OT-wwv">
                                 <rect key="frame" x="809" y="99" width="87" height="57"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="1" green="0.5" blue="0.0" alpha="0.69999999999999996" colorSpace="calibratedRGB"/>
@@ -85,6 +85,14 @@
                                     <outlet property="delegate" destination="WAZ-JN-ay1" id="kNO-HD-7a7"/>
                                 </connections>
                             </tableView>
+                            <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="doge1" id="EtB-8o-KRi">
+                                <rect key="frame" x="268" y="337" width="509" height="272"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="doge2" id="Udu-UR-nNl">
+                                <rect key="frame" x="268" y="337" width="509" height="272"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -93,8 +101,10 @@
                     <size key="freeformSize" width="1024" height="768"/>
                     <connections>
                         <outlet property="backBtn" destination="S3V-ms-Ukx" id="6W5-rM-B9F"/>
+                        <outlet property="localDoge" destination="EtB-8o-KRi" id="opr-I3-GUt"/>
                         <outlet property="refreshBtn" destination="ZDr-OT-wwv" id="Q0i-Qr-7Zc"/>
                         <outlet property="refreshSwitch" destination="5S8-ly-yqQ" id="mUX-OF-agK"/>
+                        <outlet property="remoteDoge" destination="Udu-UR-nNl" id="HGS-tW-qRL"/>
                         <outlet property="switcher" destination="FOK-De-dX1" id="ubE-SL-onB"/>
                         <outlet property="tableView" destination="7PR-1w-5Fl" id="UgH-I2-3gD"/>
                     </connections>
@@ -364,6 +374,8 @@
         </scene>
     </scenes>
     <resources>
+        <image name="doge1" width="1000" height="600"/>
+        <image name="doge2" width="1000" height="600"/>
         <image name="finish" width="150" height="150"/>
         <image name="menuBG" width="1091" height="800"/>
         <image name="player" width="256" height="256"/>

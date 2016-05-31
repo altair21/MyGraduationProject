@@ -19,6 +19,8 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
     @IBOutlet weak var backBtn: UIButton!
     @IBOutlet weak var refreshBtn: UIButton!
     @IBOutlet weak var refreshSwitch: UISwitch!
+    @IBOutlet weak var localDoge: UIImageView!
+    @IBOutlet weak var remoteDoge: UIImageView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,6 +42,15 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
         
         localMazeTitle = MazeFileManager.sharedManager.getLocalFilesList(isLocalDir: true)
         remoteMazeTitle = MazeFileManager.sharedManager.getLocalFilesList(isLocalDir: false)
+        if switcher.currentIndex == 0 {
+            if localMazeTitle.count == 0 {
+                localDoge.hidden = false
+            }
+        } else {
+            if remoteMazeTitle.count == 0 {
+                remoteDoge.hidden = false
+            }
+        }
         
         if shouldUpdateFile() {
             refreshRemoteFile()
@@ -78,6 +89,7 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
     
     func shouldUpdateFile() -> Bool {
         if let res = NSUserDefaults.standardUserDefaults().objectForKey(kRefreshValueOnDisk) as? Bool{
+            refreshSwitch.setOn(res, animated: false)
             return res
         } else {
             return refreshSwitch.on
@@ -89,6 +101,7 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     @IBAction func refreshBtnTapped(sender: UIButton) {
+        refreshRemoteFile()
     }
     
     @IBAction func backBtnTapped(sender: UIButton) {
@@ -136,6 +149,19 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
     func switcher(switcher: DynamicMaskSegmentSwitch, didSelectAtIndex index: Int) {
         print(index)
         tableView.reloadData()
+        localDoge.hidden = true
+        remoteDoge.hidden = true
+        if self.switcher.currentIndex == 0 {
+            refreshBtn.enabled = false
+            if localMazeTitle.count == 0 {
+                localDoge.hidden = false
+            }
+        } else {
+            refreshBtn.enabled = true
+            if remoteMazeTitle.count == 0 {
+                remoteDoge.hidden = false
+            }
+        }
     }
 
 }

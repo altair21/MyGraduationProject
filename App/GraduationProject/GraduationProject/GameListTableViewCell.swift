@@ -11,6 +11,7 @@ import UIKit
 class GameListTableViewCell: UITableViewCell {
     @IBOutlet weak var BGView: UIView!
     var previewZone: UIView!
+    var _filePath: String?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -24,7 +25,12 @@ class GameListTableViewCell: UITableViewCell {
     }
     
     func setupView(filePath: String) {
-        dispatch_async(dispatch_get_main_queue()) { 
+        if _filePath != nil && filePath == _filePath {
+            return
+        } else {
+            _filePath = filePath
+        }
+        dispatch_async(dispatch_get_main_queue()) {
 //            self.layer.borderColor = UIColor.blueColor().CGColor
 //            self.layer.borderWidth = 2.0
             self.previewZone = UIView(frame: CGRect(x: 40, y: 0, width: 640, height: 440))
