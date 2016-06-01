@@ -36,5 +36,20 @@ class MenuViewController: UIViewController {
     override func prefersStatusBarHidden() -> Bool {
         return true
     }
+    
+    @IBAction func startGameTapped(sender: UIButton) {
+        pushToViewController(storyboardGameListViewController)
+    }
+    
+    @IBAction func aboutTapped(sender: UIButton) {
+        pushToViewController(storyboardAboutViewController)
+    }
+    
+    func pushToViewController(identifier: String) {
+        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier(identifier)
+        UIView.transitionWithView(self.navigationController!.view, duration: 0.75, options: .TransitionFlipFromRight, animations: { 
+            self.navigationController?.pushViewController(vc, animated: false)
+        }, completion: nil)
+    }
 
 }

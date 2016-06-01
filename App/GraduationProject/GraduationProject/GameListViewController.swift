@@ -112,7 +112,9 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     @IBAction func backBtnTapped(sender: UIButton) {
-        self.navigationController?.popViewControllerAnimated(true)
+        UIView.transitionWithView(self.navigationController!.view, duration: 0.75, options: .TransitionFlipFromLeft, animations: {
+            self.navigationController?.popViewControllerAnimated(false)
+            }, completion: nil)
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

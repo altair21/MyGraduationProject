@@ -7,7 +7,7 @@
         <!--Game List View Controller-->
         <scene sceneID="kES-3e-iWY">
             <objects>
-                <viewController id="WAZ-JN-ay1" customClass="GameListViewController" customModule="GraduationProject" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="GameListViewController" id="WAZ-JN-ay1" customClass="GameListViewController" customModule="GraduationProject" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="fwX-by-4Tr">
                         <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -213,7 +213,7 @@
         <!--Make Map View Controller-->
         <scene sceneID="lNW-Du-GDM">
             <objects>
-                <viewController id="ygG-xP-E6u" customClass="MakeMapViewController" customModule="GraduationProject" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MakeMapViewController" id="ygG-xP-E6u" customClass="MakeMapViewController" customModule="GraduationProject" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="nlM-b3-utg" customClass="SKView">
                         <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -253,7 +253,7 @@
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <connections>
-                                    <segue destination="WAZ-JN-ay1" kind="push" id="6OD-OF-wUp"/>
+                                    <action selector="startGameTapped:" destination="7Zx-oi-QUM" eventType="touchUpInside" id="QJk-0z-Tvd"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="wkv-vm-877">
@@ -265,7 +265,7 @@
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <connections>
-                                    <segue destination="ygG-xP-E6u" kind="push" id="3tk-XY-Zcq"/>
+                                    <segue destination="ygG-xP-E6u" kind="push" id="UgL-56-JGR"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="gmO-v4-mge">
@@ -277,7 +277,7 @@
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <connections>
-                                    <segue destination="Hrh-Hq-bhW" kind="push" id="bQE-AA-zan"/>
+                                    <action selector="aboutTapped:" destination="7Zx-oi-QUM" eventType="touchUpInside" id="YNu-1a-BRa"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -300,9 +300,9 @@
         <!--About View Controller-->
         <scene sceneID="pr8-aq-gcb">
             <objects>
-                <viewController id="Hrh-Hq-bhW" customClass="AboutViewController" customModule="GraduationProject" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="AboutViewController" id="Hrh-Hq-bhW" customClass="AboutViewController" customModule="GraduationProject" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5oh-BX-xp5">
-                        <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="menuBG" id="6m8-ii-iOf">
