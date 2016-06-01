@@ -14,6 +14,7 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
     var mazeTitle = Array<String>()
     var localMazeTitle = Array<String>()
     var remoteMazeTitle = Array<String>()
+    var imageDic: Dictionary<String, UIImage> = [:]
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var switcher: DynamicMaskSegmentSwitch!
     @IBOutlet weak var backBtn: UIButton!
@@ -135,21 +136,58 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
         cell.backgroundColor = UIColor.clearColor()
         cell.contentView.transform = CGAffineTransformMakeRotation(CGFloat(M_PI) / 2)
         if switcher.currentIndex == 0 {
-            cell.setupView(MazeFileManager.sharedManager.getFileFullPath(self.localMazeTitle[indexPath.item], isLocalFile: true))
+            cell.setupView(fileName: self.localMazeTitle[indexPath.item],
+                           filePath: MazeFileManager.sharedManager.getFileFullPath(self.localMazeTitle[indexPath.item], isLocalFile: true),
+                           superView: self)
         } else {
-            cell.setupView(MazeFileManager.sharedManager.getFileFullPath(self.remoteMazeTitle[indexPath.item], isLocalFile: false))
+            cell.setupView(fileName: self.remoteMazeTitle[indexPath.item],
+                           filePath: MazeFileManager.sharedManager.getFileFullPath(self.remoteMazeTitle[indexPath.item], isLocalFile: false),
+                           superView: self)
         }
         return cell
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if switcher.currentIndex == 0 {
+            if imageDic[localMazeTitle[indexPath.item]] == nil {
+                return
+            }
+        } else {
+            if imageDic[remoteMazeTitle[indexPath.item]] == nil {
+                return
+            }
+        }
+        UIApplication.sharedApplication().beginIgnoringInteractionEvents()
         let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier(storyboardGameViewController) as! GameViewController
         if switcher.currentIndex == 0 {
             vc.setMazeFile(MazeFileManager.sharedManager.getFileFullPath(self.localMazeTitle[indexPath.item], isLocalFile: true))
         } else {
             vc.setMazeFile(MazeFileManager.sharedManager.getFileFullPath(self.remoteMazeTitle[indexPath.item], isLocalFile: false))
         }
-        self.navigationController?.pushViewController(vc, animated: true)
+        let cell = tableView.cellForRowAtIndexPath(indexPath) as! GameListTableViewCell
+        let rect = cell.previewZone.convertRect(cell.previewZone.bounds, toView: self.view)
+        let image = UIImageView()
+        image.frame = rect
+        if switcher.currentIndex == 0 {
+            image.image = imageDic[localMazeTitle[indexPath.item]]
+        } else {
+            image.image = imageDic[remoteMazeTitle[indexPath.item]]
+        }
+        let topPanel = UIImageView(image: UIImage(named: "top_panel"))
+        topPanel.frame = rect
+        topPanel.alpha = 0
+        self.view.addSubview(topPanel)
+        self.view.addSubview(image)
+        UIView.animateWithDuration(0.5, animations: {
+            image.frame = CGRect(x: 0, y: 64, width: 1024, height: 704)
+            topPanel.frame = CGRect(x: 0, y: 0, width: 1024, height: 64)
+            topPanel.alpha = 1
+        }) { (res) in
+            image.removeFromSuperview()
+            topPanel.removeFromSuperview()
+            self.navigationController?.pushViewController(vc, animated: false)
+            UIApplication.sharedApplication().endIgnoringInteractionEvents()
+        }
     }
     
     override func prefersStatusBarHidden() -> Bool {
