@@ -91,7 +91,8 @@ class GameListTableViewCell: UITableViewCell {
                 }
             }
         }
-        dispatch_async(dispatch_get_main_queue()) { 
+        dispatch_async(dispatch_get_main_queue()) {
+            UIView.setAnimationsEnabled(true)
             completion()
         }
     }

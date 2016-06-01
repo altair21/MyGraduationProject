@@ -165,6 +165,7 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.reloadData()
         localDoge.hidden = true
         remoteDoge.hidden = true
+        UIView.setAnimationsEnabled(true)
         if self.switcher.currentIndex == 0 {
             refreshBtn.enabled = false
             if localMazeTitle.count == 0 {
