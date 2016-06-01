@@ -58,15 +58,15 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="59" sectionHeaderHeight="28" sectionFooterHeight="28" id="7PR-1w-5Fl">
-                                <rect key="frame" x="0.0" y="230" width="440" height="1024"/>
+                                <rect key="frame" x="0.0" y="230" width="460" height="1024"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="GameListTableViewCell" rowHeight="720" id="xhi-cb-qbm" customClass="GameListTableViewCell" customModule="GraduationProject" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="440" height="720"/>
+                                        <rect key="frame" x="0.0" y="28" width="460" height="720"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="xhi-cb-qbm" id="XaE-07-Bbt">
-                                            <rect key="frame" x="0.0" y="0.0" width="440" height="720"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="460" height="720"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" id="yy0-Mn-gQF">

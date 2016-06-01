@@ -34,9 +34,9 @@ class GameListTableViewCell: UITableViewCell {
         self.superView = superView
         self.previewZone = UIView(frame: CGRect(x: 40, y: 0, width: 640, height: 440))
         self.previewZone.alpha = 0
-//            previewZone.layer.shadowColor = UIColor.blackColor().CGColor
-//            previewZone.layer.shadowOffset = CGSize(width: 4, height: 4)
-//            previewZone.layer.shadowOpacity = 0.8
+        previewZone.layer.shadowColor = UIColor.blackColor().CGColor
+        previewZone.layer.shadowOffset = CGSize(width: 4, height: 4)
+        previewZone.layer.shadowOpacity = 0.8
         let previewZoneBG = UIImageView(image: UIImage(named: "background"))
         previewZoneBG.contentMode = .ScaleToFill
         previewZoneBG.frame = CGRect(x: 0, y: 0, width: 640, height: 440)
