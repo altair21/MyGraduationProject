@@ -33,11 +33,12 @@ class GameListTableViewCell: UITableViewCell {
         }
         self.superView = superView
         self.previewZone = UIView(frame: CGRect(x: 40, y: 0, width: 640, height: 440))
-//        self.previewZone.alpha = 0
+        self.previewZone.alpha = 0
 //            previewZone.layer.shadowColor = UIColor.blackColor().CGColor
 //            previewZone.layer.shadowOffset = CGSize(width: 4, height: 4)
 //            previewZone.layer.shadowOpacity = 0.8
         let previewZoneBG = UIImageView(image: UIImage(named: "background"))
+        previewZoneBG.contentMode = .ScaleToFill
         previewZoneBG.frame = CGRect(x: 0, y: 0, width: 640, height: 440)
         dispatch_async(dispatch_get_main_queue()) {
             for view in self.BGView.subviews {
@@ -46,16 +47,20 @@ class GameListTableViewCell: UITableViewCell {
             self.BGView.addSubview(self.previewZone)
             self.previewZone.addSubview(previewZoneBG)
         }
-        if superView.imageDic[fileName] == nil {
-            superView.imageDic[fileName] = previewZoneBG.image
+        self.loadLevel(filePath) {
+            if self.previewZone.alpha != 0.1 {
+                UIView.animateWithDuration(0.5, animations: {
+                    self.previewZone.alpha = 1.0
+                })
+            }
+            if superView.imageDic[fileName] == nil {
+                UIGraphicsBeginImageContext(self.previewZone.bounds.size)
+                self.previewZone.layer.renderInContext(UIGraphicsGetCurrentContext()!)
+                let image = UIGraphicsGetImageFromCurrentImageContext()
+                UIGraphicsEndImageContext()
+                superView.imageDic[fileName] = image
+            }
         }
-//        self.loadLevel(filePath) {
-//            if self.previewZone.alpha != 0.1 {
-//                UIView.animateWithDuration(0.5, animations: { 
-//                    self.previewZone.alpha = 1.0
-//                })
-//            }
-//        }
     }
     
     func showPreviewZone() {
