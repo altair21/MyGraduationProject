@@ -15,6 +15,9 @@ let vPreviewTextureLength = 20
 let vMenuBtnCornerRadius: CGFloat = 25.0
 
 let storyboardGameViewController = "GameViewController"
+let storyboardGameListViewController = "GameListViewController"
+let storyboardMakeMapViewController = "MakeMapViewController"
+let storyboardAboutViewController = "AboutViewController"
 
 let cellGameListTableViewCell = "GameListTableViewCell"
 
