@@ -42,7 +42,9 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
         super.viewWillAppear(animated)
         
         localMazeTitle = MazeFileManager.sharedManager.getLocalFilesList(isLocalDir: true)
+        localMazeTitle.sortInPlace()
         remoteMazeTitle = MazeFileManager.sharedManager.getLocalFilesList(isLocalDir: false)
+        remoteMazeTitle.sortInPlace()
         if switcher.currentIndex == 0 {
             if localMazeTitle.count == 0 {
                 localDoge.hidden = false
@@ -68,9 +70,11 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
             if let JSON = result.value {
                 if JSON["result"] as! String == "success" {
                     let tempArr: Array<String> = JSON["files"] as! Array
+                    var updateFlag = false
                     for title in tempArr {
                         if !self.localMazeTitle.contains(title) {
                             self.remoteMazeTitle.append(title)
+                            updateFlag = true
                             MazeFileManager.sharedManager.download(title)
                         }
                     }
@@ -78,8 +82,10 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
                     //去重，原谅我用这么奇怪的姿势
                     let tempSet = Set(self.remoteMazeTitle)
                     self.remoteMazeTitle = Array(tempSet)
-                    
-                    self.tableView.reloadData()
+                    self.remoteMazeTitle.sortInPlace()
+                    if updateFlag {
+                        self.tableView.reloadData()
+                    }
                 }
 //                print("JSON: \(JSON)")
             }
