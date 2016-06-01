@@ -164,14 +164,16 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
             }
         }
         UIApplication.sharedApplication().beginIgnoringInteractionEvents()
-        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier(storyboardGameViewController) as! GameViewController
-        if switcher.currentIndex == 0 {
-            vc.setMazeFile(MazeFileManager.sharedManager.getFileFullPath(self.localMazeTitle[indexPath.item], isLocalFile: true))
-        } else {
-            vc.setMazeFile(MazeFileManager.sharedManager.getFileFullPath(self.remoteMazeTitle[indexPath.item], isLocalFile: false))
-        }
         let cell = tableView.cellForRowAtIndexPath(indexPath) as! GameListTableViewCell
         let rect = cell.previewZone.convertRect(cell.previewZone.bounds, toView: self.view)
+        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier(storyboardGameViewController) as! GameViewController
+        if switcher.currentIndex == 0 {
+            vc.setMazeFile(MazeFileManager.sharedManager.getFileFullPath(self.localMazeTitle[indexPath.item], isLocalFile: true), image: imageDic[localMazeTitle[indexPath.item]]!,
+                           position: rect, viewController: self)
+        } else {
+            vc.setMazeFile(MazeFileManager.sharedManager.getFileFullPath(self.remoteMazeTitle[indexPath.item], isLocalFile: false), image: imageDic[remoteMazeTitle[indexPath.item]]!,
+                           position: rect, viewController: self)
+        }
         let image = UIImageView()
         image.frame = rect
         if switcher.currentIndex == 0 {

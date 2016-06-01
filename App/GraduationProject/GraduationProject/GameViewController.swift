@@ -17,6 +17,9 @@ class GameViewController: UIViewController {
     var gameScene: GameScene!
     var isPlaying = false
     var mazeFilePath: String!
+    var previewImage: UIImage!
+    var previewImagePosition: CGRect!
+    weak var gameListVC: GameListViewController!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,8 +52,11 @@ class GameViewController: UIViewController {
         
     }
     
-    func setMazeFile(filePath: String) {
+    func setMazeFile(filePath: String, image: UIImage, position: CGRect, viewController: GameListViewController) {
         mazeFilePath = filePath
+        previewImage = image
+        previewImagePosition = position
+        gameListVC = viewController
     }
     
     @IBAction func playTapped(sender: UIButton) {
@@ -73,7 +79,7 @@ class GameViewController: UIViewController {
             gameScene.gamePause()
             let alert = UIAlertController(title: nil, message: "确定退出游戏吗？", preferredStyle: .Alert)
             let okBtn = UIAlertAction(title: "确定", style: .Default, handler: { (_) in
-                self.navigationController?.popViewControllerAnimated(true)
+                self.backTappedGo(false)
             })
             let cancelBtn = UIAlertAction(title: "取消", style: .Cancel, handler: { (_) in
                 self.gameScene.gameStart()
@@ -82,8 +88,72 @@ class GameViewController: UIViewController {
             alert.addAction(cancelBtn)
             self.presentViewController(alert, animated: true, completion: nil)
         } else {
-            self.navigationController?.popViewControllerAnimated(true)
+            backTappedGo(false)
         }
+    }
+    
+    func backTappedGo(gamePassed: Bool) {
+        let imageView = UIImageView(image: imageFromSKNode(gameScene))
+        imageView.frame = CGRect(x: 0, y: 64, width: 1024, height: 704)
+        let topPanel = UIImageView(image: UIImage(named: "top_panel"))
+        topPanel.frame = CGRect(x: 0, y: 0, width: 1024, height: 64)
+        self.view.addSubview(topPanel)
+        self.view.addSubview(imageView)
+        self.navigationController?.popViewControllerAnimated(false)
+        gameListVC.view.addSubview(topPanel)
+        gameListVC.view.addSubview(imageView)
+        UIApplication.sharedApplication().beginIgnoringInteractionEvents()
+        if gamePassed {
+            topPanel.alpha = 0
+            UIView.animateWithDuration(1.5, animations: {
+                imageView.alpha = 0
+                imageView.frame = self.previewImagePosition
+            }, completion: { (res) in
+                UIApplication.sharedApplication().endIgnoringInteractionEvents()
+                topPanel.removeFromSuperview()
+                imageView.removeFromSuperview()
+            })
+        } else {
+            UIView.animateWithDuration(1.0, animations: {
+                topPanel.frame = self.previewImagePosition
+                topPanel.alpha = 0
+                imageView.frame = self.previewImagePosition
+            }) { (res) in
+                UIApplication.sharedApplication().endIgnoringInteractionEvents()
+                topPanel.removeFromSuperview()
+                imageView.removeFromSuperview()
+            }
+        }
+    }
+    
+    func gamePassedGo() {
+        backTappedGo(true)
+    }
+    
+    func imageFromSKNode(node: SKNode) -> UIImage {
+        let view = node.scene?.view
+        let scale = UIScreen.mainScreen().scale
+        let nodeFrame = node.calculateAccumulatedFrame()
+        
+        UIGraphicsBeginImageContextWithOptions(view!.bounds.size, true, 0)
+        view?.drawViewHierarchyInRect(view!.bounds, afterScreenUpdates: true)
+        let sceneSnapshot = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        let originY = sceneSnapshot.size.height*scale - nodeFrame.origin.y*scale - nodeFrame.size.height*scale
+        let cropRect = CGRect(x: node.frame.origin.x * scale,
+                              y: originY,
+                              width: node.frame.size.width * scale,
+                              height: node.frame.size.height * scale)
+        let croppedSnapshot = CGImageCreateWithImageInRect(sceneSnapshot.CGImage, cropRect)
+        let nodeSnapshot = UIImage(CGImage: croppedSnapshot!)
+        
+        //retain屏幕的rect
+        let resRect = CGRect(x: 0, y: 128, width: 2048, height: 1408)
+        let resCGSnapshot = CGImageCreateWithImageInRect(nodeSnapshot.CGImage, resRect)
+        let resSnapshot = UIImage(CGImage: resCGSnapshot!)
+        
+        return resSnapshot
     }
     
     func gamePassed() {
@@ -101,7 +171,7 @@ class GameViewController: UIViewController {
             view.layer.opacity = 0.7
         }
         
-        self.performSelector(#selector(delayPop), withObject: nil, afterDelay: 3)
+        self.performSelector(#selector(gamePassedGo), withObject: nil, afterDelay: 2)
     }
     
     func delayPop() {
