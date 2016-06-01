@@ -38,8 +38,8 @@ App的后台使用django，做了三个简单的API，分别是上传文件、�
 
 - <del>美化GameListViewController</del>
 - <del>优化GameListViewController性能</del>
-- 添加Multipeer Connectivity Framework，提供近距离分享地图文件的支持（走到这一步添加这个鸡肋的功能我内心是拒绝的，但年轻时的我在毕设任务书上写了这项）
+- <del>添加Multipeer Connectivity Framework，提供近距离分享地图文件的支持（走到这一步添加这个鸡肋的功能我内心是拒绝的，但年轻时的我在毕设任务书上写了这项）</del> **<font color="red">该功能未添加</font>，我修改了任务书，这么鸡肋的功能没啥必要**
 - 保存关卡分数
-- 自定义转场动画
+- <del>自定义转场动画</del>
 
 
