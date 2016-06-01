@@ -4,3 +4,4 @@ App/GraduationProject/Pods
 Server/src/AppServer/upload
 *.sqlite3
 App/builds/
+*.pyc
