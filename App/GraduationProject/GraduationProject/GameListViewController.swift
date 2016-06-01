@@ -122,16 +122,12 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         let myCell = cell as! GameListTableViewCell
-        dispatch_async(dispatch_get_main_queue()) { 
-            UIView.animateWithDuration(0.5) {
-                myCell.previewZone.alpha = 1.0
-            }
-        }
+        myCell.showPreviewZone()
     }
     
     func tableView(tableView: UITableView, didEndDisplayingCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         let myCell = cell as! GameListTableViewCell
-        myCell.previewZone.alpha = 0
+        myCell.previewZone.alpha = 0.1
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {

@@ -44,12 +44,28 @@ class GameListTableViewCell: UITableViewCell {
             self.previewZone.addSubview(previewZoneBG)
         }
         self.loadLevel(filePath) {
+            if self.previewZone.alpha != 0.1 {
+                UIView.animateWithDuration(0.5, animations: { 
+                    self.previewZone.alpha = 1.0
+                })
+            }
+        }
+    }
+    
+    func showPreviewZone() {
+        if self.previewZone.alpha != 0 {
+            dispatch_async(dispatch_get_main_queue(), { 
+                UIView.animateWithDuration(0.5, animations: {
+                    self.previewZone.alpha = 1.0
+                })
+            })
         }
     }
     
     func loadLevel(filePath: String, completion: () -> Void) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)) {
             if let levelString = try? String(contentsOfFile: filePath, usedEncoding: nil) {
+                var textures: [UIImageView] = []
                 let lines = levelString.componentsSeparatedByString("\n")
                 
                 for (row, line) in lines.reverse().enumerate() {
@@ -84,16 +100,19 @@ class GameListTableViewCell: UITableViewCell {
                         default: break
                             
                         }
-                        dispatch_async(dispatch_get_main_queue(), { 
-                            self.previewZone.addSubview(texture)
-                        })
+                        textures.append(texture)
                     }
                 }
+                dispatch_async(dispatch_get_main_queue(), { 
+                    for texture in textures {
+                        self.previewZone.addSubview(texture)
+                    }
+                })
             }
-        }
-        dispatch_async(dispatch_get_main_queue()) {
-            UIView.setAnimationsEnabled(true)
-            completion()
+            dispatch_async(dispatch_get_main_queue()) {
+                UIView.setAnimationsEnabled(true)
+                completion()
+            }
         }
     }
     
