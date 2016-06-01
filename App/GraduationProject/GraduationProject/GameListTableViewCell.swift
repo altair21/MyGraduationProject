@@ -11,7 +11,9 @@ import UIKit
 class GameListTableViewCell: UITableViewCell {
     @IBOutlet weak var BGView: UIView!
     var previewZone: UIView!
-    var _filePath: String?
+    var filePath: String?
+    var fileName: String?
+    weak var superView: GameListViewController!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -23,18 +25,20 @@ class GameListTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    func setupView(filePath: String) {
-        if _filePath != nil && filePath == _filePath {
+    func setupView(fileName fileName: String, filePath: String, superView: GameListViewController) {
+        if self.fileName != nil && fileName == self.fileName {
             return
         } else {
-            _filePath = filePath
+            self.fileName = fileName
         }
+        self.superView = superView
         self.previewZone = UIView(frame: CGRect(x: 40, y: 0, width: 640, height: 440))
         self.previewZone.alpha = 0
 //            previewZone.layer.shadowColor = UIColor.blackColor().CGColor
 //            previewZone.layer.shadowOffset = CGSize(width: 4, height: 4)
 //            previewZone.layer.shadowOpacity = 0.8
         let previewZoneBG = UIImageView(image: UIImage(named: "background"))
+        previewZoneBG.contentMode = .ScaleToFill
         previewZoneBG.frame = CGRect(x: 0, y: 0, width: 640, height: 440)
         dispatch_async(dispatch_get_main_queue()) {
             for view in self.BGView.subviews {
@@ -45,9 +49,16 @@ class GameListTableViewCell: UITableViewCell {
         }
         self.loadLevel(filePath) {
             if self.previewZone.alpha != 0.1 {
-                UIView.animateWithDuration(0.5, animations: { 
+                UIView.animateWithDuration(0.5, animations: {
                     self.previewZone.alpha = 1.0
                 })
+            }
+            if superView.imageDic[fileName] == nil {
+                UIGraphicsBeginImageContext(self.previewZone.bounds.size)
+                self.previewZone.layer.renderInContext(UIGraphicsGetCurrentContext()!)
+                let image = UIGraphicsGetImageFromCurrentImageContext()
+                UIGraphicsEndImageContext()
+                superView.imageDic[fileName] = image
             }
         }
     }
