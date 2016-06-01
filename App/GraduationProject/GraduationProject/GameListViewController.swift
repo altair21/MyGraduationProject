@@ -83,7 +83,7 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
                     let tempSet = Set(self.remoteMazeTitle)
                     self.remoteMazeTitle = Array(tempSet)
                     self.remoteMazeTitle.sortInPlace()
-                    if updateFlag {
+                    if updateFlag && self.switcher.currentIndex == 1 {
                         self.tableView.reloadData()
                     }
                 }
@@ -129,15 +129,15 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
         return CGFloat(720)
     }
     
-    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        let myCell = cell as! GameListTableViewCell
-        myCell.showPreviewZone()
-    }
+//    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+//        let myCell = cell as! GameListTableViewCell
+//        myCell.showPreviewZone()
+//    }
     
-    func tableView(tableView: UITableView, didEndDisplayingCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        let myCell = cell as! GameListTableViewCell
-        myCell.previewZone.alpha = 0.1
-    }
+//    func tableView(tableView: UITableView, didEndDisplayingCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+//        let myCell = cell as! GameListTableViewCell
+//        myCell.previewZone.alpha = 0.1
+//    }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(cellGameListTableViewCell) as! GameListTableViewCell
@@ -156,17 +156,9 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if switcher.currentIndex == 0 {
-            if imageDic[localMazeTitle[indexPath.item]] == nil {
-                return
-            }
-        } else {
-            if imageDic[remoteMazeTitle[indexPath.item]] == nil {
-                return
-            }
-        }
         UIApplication.sharedApplication().beginIgnoringInteractionEvents()
         let cell = tableView.cellForRowAtIndexPath(indexPath) as! GameListTableViewCell
+        cell.snapshot()
         let rect = cell.previewZone.convertRect(cell.previewZone.bounds, toView: self.view)
         let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier(storyboardGameViewController) as! GameViewController
         if switcher.currentIndex == 0 {

@@ -48,28 +48,20 @@ class GameListTableViewCell: UITableViewCell {
             self.previewZone.addSubview(previewZoneBG)
         }
         self.loadLevel(filePath) {
-            if self.previewZone.alpha != 0.1 {
-                UIView.animateWithDuration(0.5, animations: {
-                    self.previewZone.alpha = 1.0
-                })
-            }
-            if superView.imageDic[fileName] == nil {
-                UIGraphicsBeginImageContext(self.previewZone.bounds.size)
-                self.previewZone.layer.renderInContext(UIGraphicsGetCurrentContext()!)
-                let image = UIGraphicsGetImageFromCurrentImageContext()
-                UIGraphicsEndImageContext()
-                superView.imageDic[fileName] = image
-            }
+            UIView.setAnimationsEnabled(true)
+            UIView.animateWithDuration(0.5, animations: {
+                self.previewZone.alpha = 1.0
+            })
         }
     }
     
-    func showPreviewZone() {
-        if self.previewZone.alpha != 0 {
-            dispatch_async(dispatch_get_main_queue(), { 
-                UIView.animateWithDuration(0.5, animations: {
-                    self.previewZone.alpha = 1.0
-                })
-            })
+    func snapshot() {
+        if superView.imageDic[self.fileName!] == nil {
+            UIGraphicsBeginImageContext(self.previewZone.bounds.size)
+            self.previewZone.layer.renderInContext(UIGraphicsGetCurrentContext()!)
+            let image = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            superView.imageDic[self.fileName!] = image
         }
     }
     
