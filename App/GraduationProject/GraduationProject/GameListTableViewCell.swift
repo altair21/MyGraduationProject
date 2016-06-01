@@ -29,29 +29,26 @@ class GameListTableViewCell: UITableViewCell {
         } else {
             _filePath = filePath
         }
-        dispatch_async(dispatch_get_main_queue()) {
-            if self.previewZone == nil {
-//            self.layer.borderColor = UIColor.blueColor().CGColor
-//            self.layer.borderWidth = 2.0
-                self.previewZone = UIView(frame: CGRect(x: 40, y: 0, width: 640, height: 440))
+        self.previewZone = UIView(frame: CGRect(x: 40, y: 0, width: 640, height: 440))
+        self.previewZone.alpha = 0
 //            previewZone.layer.shadowColor = UIColor.blackColor().CGColor
 //            previewZone.layer.shadowOffset = CGSize(width: 4, height: 4)
 //            previewZone.layer.shadowOpacity = 0.8
-                self.BGView.addSubview(self.previewZone)
-            } else {
-                for view in self.previewZone.subviews {
-                    view.removeFromSuperview()
-                }
+        let previewZoneBG = UIImageView(image: UIImage(named: "background"))
+        previewZoneBG.frame = CGRect(x: 0, y: 0, width: 640, height: 440)
+        dispatch_async(dispatch_get_main_queue()) {
+            for view in self.BGView.subviews {
+                view.removeFromSuperview()
             }
-            let previewZoneBG = UIImageView(image: UIImage(named: "background"))
-            previewZoneBG.frame = CGRect(x: 0, y: 0, width: 640, height: 440)
+            self.BGView.addSubview(self.previewZone)
             self.previewZone.addSubview(previewZoneBG)
         }
-        self.loadLevel(filePath)
+        self.loadLevel(filePath) {
+        }
     }
     
-    func loadLevel(filePath: String) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { 
+    func loadLevel(filePath: String, completion: () -> Void) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)) {
             if let levelString = try? String(contentsOfFile: filePath, usedEncoding: nil) {
                 let lines = levelString.componentsSeparatedByString("\n")
                 
@@ -93,6 +90,9 @@ class GameListTableViewCell: UITableViewCell {
                     }
                 }
             }
+        }
+        dispatch_async(dispatch_get_main_queue()) { 
+            completion()
         }
     }
     
