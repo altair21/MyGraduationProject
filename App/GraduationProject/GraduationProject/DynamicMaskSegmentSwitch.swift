@@ -144,6 +144,9 @@ extension DynamicMaskSegmentSwitch {
         
         let location = gesture.locationInView(self)
         let index = Int(floor(location.x / eachItemWidth))
+        if currentIndex == index {
+            return
+        }
         currentIndex = index
         switchToItem(index)
         

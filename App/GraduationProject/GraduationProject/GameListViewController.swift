@@ -209,6 +209,7 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
     
     func switcher(switcher: DynamicMaskSegmentSwitch, didSelectAtIndex index: Int) {
         print(index)
+        tableView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
         tableView.reloadData()
         localDoge.hidden = true
         remoteDoge.hidden = true
