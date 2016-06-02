@@ -79,12 +79,14 @@ class GameListTableViewCell: UITableViewCell {
     
     func snapshot() {
         if superView.imageDic[self.fileName!] == nil {
-            UIGraphicsBeginImageContext(self.previewZone.bounds.size)
-            self.previewZone.layer.renderInContext(UIGraphicsGetCurrentContext()!)
-            let image = UIGraphicsGetImageFromCurrentImageContext()
-            UIGraphicsEndImageContext()
-            superView.imageDic[self.fileName!] = image
-            replaceViewWithImage()
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), {
+                UIGraphicsBeginImageContext(self.previewZone.bounds.size)
+                self.previewZone.layer.renderInContext(UIGraphicsGetCurrentContext()!)
+                let image = UIGraphicsGetImageFromCurrentImageContext()
+                UIGraphicsEndImageContext()
+                self.superView.imageDic[self.fileName!] = image
+                self.replaceViewWithImage()
+            })
         }
     }
     
