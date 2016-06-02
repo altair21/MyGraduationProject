@@ -67,10 +67,13 @@ class GameViewController: UIViewController {
     }
     
     @IBAction func uploadTapped(sender: UIButton) {
+        uploadBtn.enabled = false
         MazeFileManager.sharedManager.uploadFile(filePath: NSURL(fileURLWithPath: mazeFilePath), uploadSuccess: { 
             showCenterToast("迷宫上传成功")
+            self.uploadBtn.enabled = true
         }) {
             showCenterToast("迷宫上传失败")
+            self.uploadBtn.enabled = true
         }
     }
     

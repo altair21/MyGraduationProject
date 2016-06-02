@@ -56,7 +56,7 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
         }
         
         if shouldUpdateFile() {
-            refreshRemoteFile()
+            refreshRemoteFile(false)
         }
     }
 
@@ -65,7 +65,7 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
         // Dispose of any resources that can be recreated.
     }
     
-    func refreshRemoteFile() {
+    func refreshRemoteFile(forceUpdate: Bool) {
         MazeFileManager.sharedManager.getFileList({ (result) in
             if let JSON = result.value {
                 if JSON["result"] as! String == "success" {
@@ -79,6 +79,10 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
                         }
                     }
                     
+                    if forceUpdate {
+                        showCenterToast("获取文件列表成功")
+                    }
+                    
                     //去重，原谅我用这么奇怪的姿势
                     let tempSet = Set(self.remoteMazeTitle)
                     self.remoteMazeTitle = Array(tempSet)
@@ -86,10 +90,17 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
                     if updateFlag && self.switcher.currentIndex == 1 {
                         self.tableView.reloadData()
                     }
+                } else {
+                    if forceUpdate {
+                        showCenterToast("获取文件列表失败")
+                    }
                 }
 //                print("JSON: \(JSON)")
             }
         }) { (error) in
+            if forceUpdate {
+                showCenterToast("获取文件列表失败")
+            }
             print(error)
         }
     }
@@ -108,7 +119,7 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     @IBAction func refreshBtnTapped(sender: UIButton) {
-        refreshRemoteFile()
+        refreshRemoteFile(true)
     }
     
     @IBAction func backBtnTapped(sender: UIButton) {
