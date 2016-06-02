@@ -140,16 +140,6 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
         return CGFloat(720)
     }
     
-//    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-//        let myCell = cell as! GameListTableViewCell
-//        myCell.showPreviewZone()
-//    }
-    
-//    func tableView(tableView: UITableView, didEndDisplayingCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-//        let myCell = cell as! GameListTableViewCell
-//        myCell.previewZone.alpha = 0.1
-//    }
-    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(cellGameListTableViewCell) as! GameListTableViewCell
         cell.backgroundColor = UIColor.clearColor()

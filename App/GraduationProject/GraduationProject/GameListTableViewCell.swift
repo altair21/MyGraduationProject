@@ -33,7 +33,7 @@ class GameListTableViewCell: UITableViewCell {
         }
         self.superView = superView
         self.previewZone = UIView(frame: CGRect(x: 40, y: 0, width: 640, height: 440))
-        self.previewZone.alpha = 0
+        self.BGView.alpha = 0
         previewZone.layer.shadowColor = UIColor.blackColor().CGColor
         previewZone.layer.shadowOffset = CGSize(width: 4, height: 4)
         previewZone.layer.shadowOpacity = 0.8
@@ -51,7 +51,7 @@ class GameListTableViewCell: UITableViewCell {
             self.loadLevel(filePath) {
                 UIView.setAnimationsEnabled(true)
                 UIView.animateWithDuration(0.5, animations: { 
-                    self.previewZone.alpha = 1.0
+                    self.BGView.alpha = 1.0
                 }, completion: { (res) in
                     self.snapshot()
                 })
@@ -60,7 +60,7 @@ class GameListTableViewCell: UITableViewCell {
             replaceViewWithImage()
             UIView.setAnimationsEnabled(true)
             UIView.animateWithDuration(0.5, animations: { 
-                self.previewZone.alpha = 1.0
+                self.BGView.alpha = 1.0
             })
         }
     }
