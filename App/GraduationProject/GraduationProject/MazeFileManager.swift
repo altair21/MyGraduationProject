@@ -95,27 +95,26 @@ class MazeFileManager: NSObject {
         Alamofire.upload(.POST, APIupload,
             multipartFormData: { (multipartFormData) in
                 multipartFormData.appendBodyPart(fileURL: path, name: "headImg")
-            }) { (encodingResult) in
-                switch encodingResult {
-                case .Success(let upload, _, _):
-                    upload.responseString(completionHandler: { (response) in
-                        print(response)
-                        if response.description.rangeOfString("upload ok") != nil {
-                            dispatch_async(dispatch_get_main_queue(), { 
-                                uploadSuccess()
-                            })
-                        } else {
-                            dispatch_async(dispatch_get_main_queue(), { 
-                                uploadFailure()
-                            })
-                        }
-                    })
-                case .Failure(let encodingError):
-                    dispatch_async(dispatch_get_main_queue(), { 
-                        uploadFailure()
-                    })
-                    print(encodingError)
-                }
+        }) { (encodingResult) in
+            switch encodingResult {
+            case .Success(let upload, _, _):
+                upload.responseString(completionHandler: { (response) in
+                    print(response)
+                    if response.description.rangeOfString("upload ok") != nil {
+                        dispatch_async(dispatch_get_main_queue(), { 
+                            uploadSuccess()
+                        })
+                    } else {
+                        dispatch_async(dispatch_get_main_queue(), { 
+                            uploadFailure()
+                        })
+                    }
+                })
+            case .Failure(_):
+                dispatch_async(dispatch_get_main_queue(), { 
+                    uploadFailure()
+                })
+            }
         }
     }
     
