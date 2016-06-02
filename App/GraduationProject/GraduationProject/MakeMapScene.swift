@@ -33,7 +33,8 @@ class MakeMapScene: SKScene {
     var mapFinishPosition: MapNode!
     var borderView: UIView!
     let enumNodeName = "enumNodeName"
-    var customQueue = dispatch_queue_create("com.altair21.queue", DISPATCH_QUEUE_SERIAL)
+    let customQueue = dispatch_queue_create("com.altair21.queue", DISPATCH_QUEUE_SERIAL)
+    
     weak var viewController: MakeMapViewController!
     
     var lastTouchMapNode: MapNode!
@@ -107,8 +108,6 @@ class MakeMapScene: SKScene {
                 mapFinishPosition = MapNode(x: col, y: row)
             }
             addChild(node)
-            
-            let tempNode = MapNode(x: col, y: row)
         }
         
         lastTouchMapNode = MapNode(x: col, y: row)
