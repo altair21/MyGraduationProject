@@ -14,7 +14,6 @@ struct MapNode {
 }   //为方便（其实是我懒得改了），制作迷宫时x为列数，y为行数。在bfs时，x为行数，y为列数
 
 class MakeMapScene: SKScene {
-    var mazeString: String = ""
     var player: SKSpriteNode!
     var finish: SKSpriteNode!
     var wall: SKSpriteNode!
@@ -97,14 +96,12 @@ class MakeMapScene: SKScene {
             } else if currentSelectNode == player {
                 if let mapPlayer = mapPlayer {
                     mapPlayer.removeFromParent()
-                    updateMazeString(mapPlayerPosition, character: " ")
                 }
                 mapPlayer = node
                 mapPlayerPosition = MapNode(x: col, y: row)
             } else if currentSelectNode == finish {
                 if let mapFinish = mapFinish {
                     mapFinish.removeFromParent()
-                    updateMazeString(mapFinishPosition, character: " ")
                 }
                 mapFinish = node
                 mapFinishPosition = MapNode(x: col, y: row)
@@ -112,22 +109,75 @@ class MakeMapScene: SKScene {
             addChild(node)
             
             let tempNode = MapNode(x: col, y: row)
-            updateMazeString(tempNode, character: currentSelectNodeCharacter)
         }
         
         lastTouchMapNode = MapNode(x: col, y: row)
     }
     
-    func updateMazeString(position: MapNode, character: Character) {
-        let offset = (21 - position.y) * 33 + position.x
-        var index = mazeString.startIndex
-        for _ in 0..<offset {
-            index = index.successor()
+    func generateMazeString() -> String {
+        var mazeString = ""
+        for _ in 1...32 {
+            mazeString.append(Character("x"))
         }
-        dispatch_sync(customQueue) { 
-            self.mazeString.removeAtIndex(index)
-            self.mazeString.insert(character, atIndex: index)
+        mazeString.append(Character("\n"))
+        for _ in 2..<22 {
+            mazeString.append(Character("x"))
+            for _ in 2..<32 {
+                mazeString.append(Character(" "))
+            }
+            mazeString.append(Character("x"))
+            mazeString.append(Character("\n"))
         }
+        for _ in 1...32 {
+            mazeString.append(Character("x"))
+        }
+        
+        self.enumerateChildNodesWithName(enumNodeName) { (sknode, _) in
+            let node = sknode as! SKSpriteNode
+            if node.size != CGSize(width: vTextureLength, height: vTextureLength) {
+                return
+            }
+            let point = node.position
+            let col: Int = Int(point.x / CGFloat(vTextureLength))
+            let row: Int = Int(point.y / CGFloat(vTextureLength))
+            if (col == 0 || col == 31 || row == 0 || row == 21) {
+                return
+            }
+            
+            var letter: Character!
+            if node.texture == self.player.texture {
+                letter = "p"
+            } else if node.texture == self.finish.texture {
+                letter = "f"
+            } else if node.texture == self.vortex.texture {
+                letter = "v"
+            } else if node.texture == self.star.texture {
+                letter = "s"
+            } else if node.texture == self.wall.texture {
+                letter = "x"
+            } else if node.texture == self.spring1.texture {
+                letter = "1"
+            } else if node.texture == self.spring2.texture {
+                letter = "2"
+            } else if node.texture == self.spring3.texture {
+                letter = "3"
+            } else if node.texture == self.spring4.texture {
+                letter = "4"
+            }
+            
+            let offset = (21 - row) * 33 + col
+            var index = mazeString.startIndex
+            for _ in 0..<offset {
+                index = index.successor()
+            }
+            dispatch_sync(self.customQueue, {
+                mazeString.removeAtIndex(index)
+                mazeString.insert(letter, atIndex: index)
+            })
+            
+        }
+        
+        return mazeString
     }
     
     func checkNodeRemove(point: CGPoint) {
@@ -242,26 +292,6 @@ class MakeMapScene: SKScene {
             node.size = CGSize(width: vTextureLength, height: vTextureLength)
             addChild(node)
         }
-        
-        initMazeString()
-    }
-    
-    func initMazeString() {
-        for _ in 1...32 {
-            mazeString.append(Character("x"))
-        }
-        mazeString.append(Character("\n"))
-        for _ in 2..<22 {
-            mazeString.append(Character("x"))
-            for _ in 2..<32 {
-                mazeString.append(Character(" "))
-            }
-            mazeString.append(Character("x"))
-            mazeString.append(Character("\n"))
-        }
-        for _ in 1...32 {
-            mazeString.append(Character("x"))
-        }
     }
     
     func initBG() {
@@ -360,6 +390,7 @@ class MakeMapScene: SKScene {
     }
     
     func checkValidity(uploadMaze uploadMaze: Bool) {
+        let mazeString = generateMazeString()
         var hasPlayer = false
         var hasFinish = false
         for char in mazeString.characters {
