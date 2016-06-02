@@ -47,11 +47,33 @@ class GameListTableViewCell: UITableViewCell {
             self.BGView.addSubview(self.previewZone)
             self.previewZone.addSubview(previewZoneBG)
         }
-        self.loadLevel(filePath) {
+        if superView.imageDic[self.fileName!] == nil {
+            self.loadLevel(filePath) {
+                UIView.setAnimationsEnabled(true)
+                UIView.animateWithDuration(0.5, animations: { 
+                    self.previewZone.alpha = 1.0
+                }, completion: { (res) in
+                    self.snapshot()
+                })
+            }
+        } else {
+            replaceViewWithImage()
             UIView.setAnimationsEnabled(true)
-            UIView.animateWithDuration(0.5, animations: {
+            UIView.animateWithDuration(0.5, animations: { 
                 self.previewZone.alpha = 1.0
             })
+        }
+    }
+    
+    func replaceViewWithImage() {
+        dispatch_async(dispatch_get_main_queue()) { 
+            for view in self.BGView.subviews {
+                view.removeFromSuperview()
+            }
+            let imageView = UIImageView(image: self.superView.imageDic[self.fileName!])
+            imageView.frame = CGRect(x: 0, y: 0, width: 640, height: 440)
+            self.BGView.addSubview(self.previewZone)
+            self.previewZone.addSubview(imageView)
         }
     }
     
@@ -62,6 +84,7 @@ class GameListTableViewCell: UITableViewCell {
             let image = UIGraphicsGetImageFromCurrentImageContext()
             UIGraphicsEndImageContext()
             superView.imageDic[self.fileName!] = image
+            replaceViewWithImage()
         }
     }
     
