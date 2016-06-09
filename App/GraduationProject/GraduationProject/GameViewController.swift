@@ -108,7 +108,7 @@ class GameViewController: UIViewController {
         UIApplication.sharedApplication().beginIgnoringInteractionEvents()
         if gamePassed {
             topPanel.alpha = 0
-            UIView.animateWithDuration(1.5, animations: {
+            UIView.animateWithDuration(1.0, animations: {
                 imageView.alpha = 0
                 imageView.frame = self.previewImagePosition
             }, completion: { (res) in
@@ -117,7 +117,7 @@ class GameViewController: UIViewController {
                 imageView.removeFromSuperview()
             })
         } else {
-            UIView.animateWithDuration(1.0, animations: {
+            UIView.animateWithDuration(0.5, animations: {
                 topPanel.frame = self.previewImagePosition
                 topPanel.alpha = 0
                 imageView.frame = self.previewImagePosition

@@ -181,7 +181,7 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
         topPanel.alpha = 0
         self.view.addSubview(topPanel)
         self.view.addSubview(image)
-        UIView.animateWithDuration(0.5, animations: {
+        UIView.animateWithDuration(0.4, animations: {
             image.frame = CGRect(x: 0, y: 64, width: 1024, height: 704)
             topPanel.frame = CGRect(x: 0, y: 0, width: 1024, height: 64)
             topPanel.alpha = 1
