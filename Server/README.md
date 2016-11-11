@@ -1,6 +1,6 @@
 ### 概述
 
-服务端提供文件上传、下载、返回文件列表三个功能，使用Django框架。
+服务端提供文件上传、下载、返回文件列表三个功能，有Django版和NodeJS版两种实现。
 
 ---
 
@@ -9,6 +9,7 @@
 - CentOS7.0 x64
 - Python2.7
 - Django 1.6.2
+- Node 5.11.1
 
 ---
 
@@ -32,10 +33,11 @@
 
 ### 参考资料
 
-- [上传文件](http://www.cnblogs.com/fnng/p/3740274.html)
-- [获取列表](http://stackoverflow.com/questions/2428092/creating-a-json-response-using-django-and-python)
-- [下载文件](http://www.jianshu.com/p/2ce715671340)
-- [官方WIKI](https://github.com/Alamofire/Alamofire/blob/master/README.md)
-- [部署](http://www.jianshu.com/p/80393ae41a5f)
-
+- [Django上传文件](http://www.cnblogs.com/fnng/p/3740274.html)
+- [Django获取列表](http://stackoverflow.com/questions/2428092/creating-a-json-response-using-django-and-python)
+- [Django下载文件](http://www.jianshu.com/p/2ce715671340)
+- [Alamofire官方WIKI](https://github.com/Alamofire/Alamofire/blob/master/README.md)
+- [Django部署](http://www.jianshu.com/p/80393ae41a5f)
+- [NodeJS的fs模块](https://nodejs.org/api/fs.html#fs_fs_rename_oldpath_newpath_callback)
+- [multer wiki](https://github.com/expressjs/multer)
 
