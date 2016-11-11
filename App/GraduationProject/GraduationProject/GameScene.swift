@@ -26,7 +26,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    override func didMoveToView(view: SKView) {
+    override func didMove(to view: SKView) {
         initBG()
         motionManager = CMMotionManager()
         motionManager.startAccelerometerUpdates()
@@ -37,11 +37,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         loadLevel()
     }
     
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
     }
    
-    override func update(currentTime: CFTimeInterval) {
+    override func update(_ currentTime: TimeInterval) {
         if !gameOver && isPlaying {
             if let accelerometerData = motionManager.accelerometerData {
                 physicsWorld.gravity = CGVector(dx: accelerometerData.acceleration.y * -20, dy: accelerometerData.acceleration.x * 20)
@@ -49,7 +49,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    func didBeginContact(contact: SKPhysicsContact) {
+    func didBegin(_ contact: SKPhysicsContact) {
         if contact.bodyA.node == player {
             playerCollidedWithNode(contact.bodyB.node!)
         } else if contact.bodyB.node == player {
@@ -57,20 +57,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    func playerCollidedWithNode(node: SKNode) {
+    func playerCollidedWithNode(_ node: SKNode) {
         if node.name == TextureType.Vortex.rawValue {
-            player.physicsBody!.dynamic = false
+            player.physicsBody!.isDynamic = false
             gameOver = true
             score -= 1
             
-            let move = SKAction.moveTo(node.position, duration: 0.25)
-            let scale = SKAction.scaleTo(0.0001, duration: 0.25)
+            let move = SKAction.move(to: node.position, duration: 0.25)
+            let scale = SKAction.scale(to: 0.0001, duration: 0.25)
             let remove = SKAction.removeFromParent()
             let sequence = SKAction.sequence([move, scale, remove])
-            player.runAction(sequence) { [unowned self] in
+            player.run(sequence, completion: { [unowned self] in
                 self.createPlayer()
                 self.gameOver = false
-            }
+            }) 
         } else if node.name == TextureType.Star.rawValue {
             node.removeFromParent()
             score += 1
@@ -81,27 +81,27 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func gameStart() {
         isPlaying = true
-        player.physicsBody!.dynamic = true
-        self.enumerateChildNodesWithName(TextureType.Vortex.rawValue) { (node, _) in
-            node.runAction(SKAction.repeatActionForever(SKAction.rotateByAngle(CGFloat(M_PI), duration: 1.0)))
+        player.physicsBody!.isDynamic = true
+        self.enumerateChildNodes(withName: TextureType.Vortex.rawValue) { (node, _) in
+            node.run(SKAction.repeatForever(SKAction.rotate(byAngle: CGFloat(M_PI), duration: 1.0)))
         }
     }
     
     func gamePause() {
         isPlaying = false
-        player.physicsBody!.dynamic = false
-        self.enumerateChildNodesWithName(TextureType.Vortex.rawValue) { (node, _) in
+        player.physicsBody!.isDynamic = false
+        self.enumerateChildNodes(withName: TextureType.Vortex.rawValue) { (node, _) in
             node.removeAllActions()
         }
     }
     
-    func gamePassed(node: SKNode) {
+    func gamePassed(_ node: SKNode) {
         gameOver = true
-        let scale = SKAction.scaleTo(0.0001, duration: 0.25)
+        let scale = SKAction.scale(to: 0.0001, duration: 0.25)
         let remove = SKAction.removeFromParent()
         let sequence = SKAction.sequence([scale, remove])
-        player.runAction(sequence)
-        node.runAction(sequence)
+        player.run(sequence)
+        node.run(sequence)
         
         viewController.gamePassed()
     }
@@ -109,24 +109,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func initBG() {
         let background = SKSpriteNode(imageNamed: "background")
         background.position = CGPoint(x: 512, y: 384)
-        background.blendMode = .Replace
+        background.blendMode = .replace
         background.zPosition = -2
         addChild(background)
         
         let topBG = SKSpriteNode(imageNamed: "top_bg")
         topBG.position = CGPoint(x: 512, y: 736)
-        topBG.blendMode = .Replace
+        topBG.blendMode = .replace
         topBG.zPosition = -1
         addChild(topBG)
         
         scoreLabel = SKLabelNode(fontNamed: "Chalkduster")
         scoreLabel.text = "Score: 0"
-        scoreLabel.horizontalAlignmentMode = .Left
+        scoreLabel.horizontalAlignmentMode = .left
         scoreLabel.position = CGPoint(x: 16, y: 726)
         addChild(scoreLabel)
     }
     
-    func initTexture(type: TextureType, position: CGPoint) {
+    func initTexture(_ type: TextureType, position: CGPoint) {
         let node: SKSpriteNode
         
         switch type {
@@ -137,9 +137,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             node.name = TextureType.Wall.rawValue
             node.position = position
             node.size = CGSize(width: vTextureLength, height: vTextureLength)
-            node.physicsBody = SKPhysicsBody(rectangleOfSize: node.size)
+            node.physicsBody = SKPhysicsBody(rectangleOf: node.size)
             node.physicsBody!.categoryBitMask = PhysicsCategory.Wall
-            node.physicsBody!.dynamic = false
+            node.physicsBody!.isDynamic = false
             addChild(node)
         case .Vortex:
             node = SKSpriteNode(imageNamed: "vortex")
@@ -147,7 +147,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             node.position = position
             node.size = CGSize(width: vTextureLength, height: vTextureLength)
             node.physicsBody = SKPhysicsBody(circleOfRadius: node.size.width / 2 * 0.75)
-            node.physicsBody!.dynamic = false
+            node.physicsBody!.isDynamic = false
             node.physicsBody!.categoryBitMask = PhysicsCategory.Vortex
             node.physicsBody!.collisionBitMask = PhysicsCategory.None
             node.physicsBody!.contactTestBitMask = PhysicsCategory.Player
@@ -158,7 +158,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             node.position = position
             node.size = CGSize(width: vTextureLength, height: vTextureLength)
             node.physicsBody = SKPhysicsBody(circleOfRadius: node.size.width / 2)
-            node.physicsBody!.dynamic = false
+            node.physicsBody!.isDynamic = false
             node.physicsBody!.categoryBitMask = PhysicsCategory.Star
             node.physicsBody!.collisionBitMask = PhysicsCategory.None
             node.physicsBody!.contactTestBitMask = PhysicsCategory.Player
@@ -171,7 +171,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             node.position = position
             node.size = CGSize(width: vTextureLength, height: vTextureLength)
             node.physicsBody = SKPhysicsBody(circleOfRadius: node.size.width / 2)
-            node.physicsBody!.dynamic = false
+            node.physicsBody!.isDynamic = false
             node.physicsBody!.categoryBitMask = PhysicsCategory.Finish
             node.physicsBody!.collisionBitMask = PhysicsCategory.None
             node.physicsBody!.contactTestBitMask = PhysicsCategory.Player
@@ -179,7 +179,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    func initSpring(type: Int, position: CGPoint) {
+    func initSpring(_ type: Int, position: CGPoint) {
         var node: SKSpriteNode = SKSpriteNode(imageNamed: "spring1")
         switch type {
         case 1:
@@ -205,8 +205,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         default:
             break
         }
-        node.physicsBody = SKPhysicsBody(rectangleOfSize: node.size)
-        node.physicsBody!.dynamic = false
+        node.physicsBody = SKPhysicsBody(rectangleOf: node.size)
+        node.physicsBody!.isDynamic = false
         node.physicsBody!.categoryBitMask = PhysicsCategory.Spring
         node.physicsBody!.collisionBitMask = PhysicsCategory.Player
         node.physicsBody!.contactTestBitMask = PhysicsCategory.None
@@ -215,7 +215,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         initSpringBase(type, position: position)
     }
     
-    func initSpringBase(type: Int, position: CGPoint) {
+    func initSpringBase(_ type: Int, position: CGPoint) {
         var node = SKSpriteNode(imageNamed: "spring_base_1")
         switch type {
         case 1:
@@ -241,8 +241,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         default:
             break
         }
-        node.physicsBody = SKPhysicsBody(rectangleOfSize: node.size)
-        node.physicsBody!.dynamic = false
+        node.physicsBody = SKPhysicsBody(rectangleOf: node.size)
+        node.physicsBody!.isDynamic = false
         node.physicsBody!.categoryBitMask = PhysicsCategory.Wall
         node.physicsBody!.collisionBitMask = PhysicsCategory.Player
         node.physicsBody!.contactTestBitMask = PhysicsCategory.None
@@ -264,11 +264,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func loadLevel() {
-        if let levelString = try? String(contentsOfFile: levelPath, usedEncoding: nil) {
-            let lines = levelString.componentsSeparatedByString("\n")
+        if let levelString = try? String(contentsOfFile: levelPath) {
+            let lines = levelString.components(separatedBy: "\n")
             
-            for (row, line) in lines.reverse().enumerate() {
-                for (column, letter) in line.characters.enumerate() {
+            for (row, line) in lines.reversed().enumerated() {
+                for (column, letter) in line.characters.enumerated() {
                     let position = CGPoint(x: vTextureLength * column + vTextureLength / 2, y: vTextureLength * row + vTextureLength / 2)
                     
                     switch letter {

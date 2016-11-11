@@ -33,38 +33,38 @@ class MakeMapScene: SKScene {
     var mapFinishPosition: MapNode!
     var borderView: UIView!
     let enumNodeName = "enumNodeName"
-    let customQueue = dispatch_queue_create("com.altair21.queue", DISPATCH_QUEUE_SERIAL)
+    let customQueue = DispatchQueue(label: "com.altair21.queue")
     
     weak var viewController: MakeMapViewController!
     
     var lastTouchMapNode: MapNode!
     
-    override func didMoveToView(view: SKView) {
+    override func didMove(to view: SKView) {
         initBG()
         initMaze()
     }
     
-    override func update(currentTime: NSTimeInterval) {
+    override func update(_ currentTime: TimeInterval) {
         
     }
     
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let touch = touches.first {
-            let point = touch.locationInNode(self)
+            let point = touch.location(in: self)
             if point.y >= 704 {
-                locationInScene(touch.locationInNode(self))
+                locationInScene(touch.location(in: self))
             } else {
                 drawAtPoint(point)
             }
-            print(touch.locationInNode(self))
+            print(touch.location(in: self))
         } else {
             return
         }
     }
     
-    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let touch = touches.first {
-            let point = touch.locationInNode(self)
+            let point = touch.location(in: self)
             if point.y < 704 {
                 drawAtPoint(point)
             }
@@ -73,7 +73,7 @@ class MakeMapScene: SKScene {
         }
     }
     
-    func drawAtPoint(point: CGPoint) {
+    func drawAtPoint(_ point: CGPoint) {
         if currentSelectNode == nil {
             return
         }
@@ -93,7 +93,7 @@ class MakeMapScene: SKScene {
             node.position = CGPoint(x: vTextureLength * col + vTextureLength / 2, y: vTextureLength * row + vTextureLength / 2)
             node.size = CGSize(width: vTextureLength, height: vTextureLength)
             if currentSelectNode == vortex {
-                node.runAction(SKAction.repeatActionForever(SKAction.rotateByAngle(CGFloat(M_PI), duration: 1.0)))
+                node.run(SKAction.repeatForever(SKAction.rotate(byAngle: CGFloat(M_PI), duration: 1.0)))
             } else if currentSelectNode == player {
                 if let mapPlayer = mapPlayer {
                     mapPlayer.removeFromParent()
@@ -131,7 +131,7 @@ class MakeMapScene: SKScene {
             mazeString.append(Character("x"))
         }
         
-        self.enumerateChildNodesWithName(enumNodeName) { (sknode, _) in
+        self.enumerateChildNodes(withName: enumNodeName) { (sknode, _) in
             let node = sknode as! SKSpriteNode
             if node.size != CGSize(width: vTextureLength, height: vTextureLength) {
                 return
@@ -167,11 +167,11 @@ class MakeMapScene: SKScene {
             let offset = (21 - row) * 33 + col
             var index = mazeString.startIndex
             for _ in 0..<offset {
-                index = index.successor()
+                index = mazeString.index(after: index)
             }
-            dispatch_sync(self.customQueue, {
-                mazeString.removeAtIndex(index)
-                mazeString.insert(letter, atIndex: index)
+            self.customQueue.sync(execute: {
+                mazeString.remove(at: index)
+                mazeString.insert(letter, at: index)
             })
             
         }
@@ -179,8 +179,8 @@ class MakeMapScene: SKScene {
         return mazeString
     }
     
-    func checkNodeRemove(point: CGPoint) {
-        let nodes = nodesAtPoint(point)
+    func checkNodeRemove(_ point: CGPoint) {
+        let nodes = self.nodes(at: point)
         for node in nodes {
             if node.name == enumNodeName {
                 node.removeFromParent()
@@ -188,7 +188,7 @@ class MakeMapScene: SKScene {
         }
     }
     
-    func locationInScene(position: CGPoint) {
+    func locationInScene(_ position: CGPoint) {
         if interact(position, rect: player.frame) {
             initBorderView(player.frame)
             currentSelectNode = player
@@ -234,35 +234,35 @@ class MakeMapScene: SKScene {
         }
     }
     
-    func interact(point: CGPoint, rect: CGRect) -> Bool {
-        if point.x >= CGRectGetMinX(rect) &&
-            point.x <= CGRectGetMaxX(rect) &&
-            point.y >= CGRectGetMinY(rect) &&
-            point.y <= CGRectGetMaxY(rect) {
+    func interact(_ point: CGPoint, rect: CGRect) -> Bool {
+        if point.x >= rect.minX &&
+            point.x <= rect.maxX &&
+            point.y >= rect.minY &&
+            point.y <= rect.maxY {
             return true
         } else {
             return false
         }
     }
     
-    func initBorderView(frame: CGRect) {
+    func initBorderView(_ frame: CGRect) {
         if let view = borderView {
             view.removeFromSuperview()
         }
-        let resFrame = CGRectMake(frame.origin.x - 2.5, 0, frame.size.width + 5, frame.size.height + 5)
+        let resFrame = CGRect(x: frame.origin.x - 2.5, y: 0, width: frame.size.width + 5, height: frame.size.height + 5)
         borderView = UIView(frame: resFrame)
-        borderView.layer.borderColor = UIColor.yellowColor().CGColor
+        borderView.layer.borderColor = UIColor.yellow.cgColor
         borderView.layer.borderWidth = 2.5
         self.view?.addSubview(borderView)
     }
     
-    func initBorderViewAtVortex(frame: CGRect) {
+    func initBorderViewAtVortex(_ frame: CGRect) {
         if let view = borderView {
             view.removeFromSuperview()
         }
-        let resFrame = CGRectMake(276.5, 0, 64, 64)
+        let resFrame = CGRect(x: 276.5, y: 0, width: 64, height: 64)
         borderView = UIView(frame: resFrame)
-        borderView.layer.borderColor = UIColor.yellowColor().CGColor
+        borderView.layer.borderColor = UIColor.yellow.cgColor
         borderView.layer.borderWidth = 2.5
         self.view?.addSubview(borderView)
     }
@@ -296,13 +296,13 @@ class MakeMapScene: SKScene {
     func initBG() {
         let background = SKSpriteNode(imageNamed: "background")
         background.position = CGPoint(x: 512, y: 384)
-        background.blendMode = .Replace
+        background.blendMode = .replace
         background.zPosition = -2
         addChild(background)
         
         let topBG = SKSpriteNode(imageNamed: "top_bg")
         topBG.position = CGPoint(x: 512, y: 736)
-        topBG.blendMode = .Replace
+        topBG.blendMode = .replace
         topBG.zPosition = -1
         addChild(topBG)
         
@@ -328,7 +328,7 @@ class MakeMapScene: SKScene {
         vortex = SKSpriteNode(imageNamed: "vortex")
         vortex.position = CGPoint(x: 279 + 29.5, y: 736)
         vortex.size = CGSize(width: 59, height: 59)
-        vortex.runAction(SKAction.repeatActionForever(SKAction.rotateByAngle(CGFloat(M_PI), duration: 1.0)))
+        vortex.run(SKAction.repeatForever(SKAction.rotate(byAngle: CGFloat(M_PI), duration: 1.0)))
         addChild(vortex)
         
         star = SKSpriteNode(imageNamed: "star")
@@ -370,25 +370,25 @@ class MakeMapScene: SKScene {
     
     func doneTapped() {
         //FIXME: this may cause cycling reference
-        let alert = UIAlertController(title: nil, message: "请选择要进行的操作：", preferredStyle: .Alert)
-        let okBtn = UIAlertAction(title: "完成", style: .Default) { (_) in
+        let alert = UIAlertController(title: nil, message: "请选择要进行的操作：", preferredStyle: .alert)
+        let okBtn = UIAlertAction(title: "完成", style: .default) { (_) in
             self.checkValidity(uploadMaze: false)
         }
-        let uploadBtn = UIAlertAction(title: "完成并上传", style: .Default) { (_) in
+        let uploadBtn = UIAlertAction(title: "完成并上传", style: .default) { (_) in
             self.checkValidity(uploadMaze: true)
         }
-        let discardBtn = UIAlertAction(title: "放弃并退出", style: .Default) { (_) in
-            self.viewController.navigationController?.popViewControllerAnimated(true)
+        let discardBtn = UIAlertAction(title: "放弃并退出", style: .default) { (_) in
+            self.viewController.navigationController?.popViewController(animated: true)
         }
-        let cancelBtn = UIAlertAction(title: "取消", style: .Cancel, handler: nil)
+        let cancelBtn = UIAlertAction(title: "取消", style: .cancel, handler: nil)
         alert.addAction(okBtn)
         alert.addAction(uploadBtn)
         alert.addAction(discardBtn)
         alert.addAction(cancelBtn)
-        self.view?.window?.rootViewController?.presentViewController(alert, animated: true, completion: nil)
+        self.view?.window?.rootViewController?.present(alert, animated: true, completion: nil)
     }
     
-    func checkValidity(uploadMaze uploadMaze: Bool) {
+    func checkValidity(uploadMaze: Bool) {
         let mazeString = generateMazeString()
         var hasPlayer = false
         var hasFinish = false
@@ -400,25 +400,25 @@ class MakeMapScene: SKScene {
             }
         }
         if !hasPlayer {
-            let alert = UIAlertController(title: nil, message: "迷宫没有放置小球", preferredStyle: .Alert)
-            let cancelBtn = UIAlertAction(title: "取消", style: .Cancel, handler: nil)
+            let alert = UIAlertController(title: nil, message: "迷宫没有放置小球", preferredStyle: .alert)
+            let cancelBtn = UIAlertAction(title: "取消", style: .cancel, handler: nil)
             alert.addAction(cancelBtn)
-            self.view?.window?.rootViewController?.presentViewController(alert, animated: true, completion: nil)
+            self.view?.window?.rootViewController?.present(alert, animated: true, completion: nil)
             return
         } else if !hasFinish {
-            let alert = UIAlertController(title: nil, message: "迷宫没有放置终点", preferredStyle: .Alert)
-            let cancelBtn = UIAlertAction(title: "取消", style: .Cancel, handler: nil)
+            let alert = UIAlertController(title: nil, message: "迷宫没有放置终点", preferredStyle: .alert)
+            let cancelBtn = UIAlertAction(title: "取消", style: .cancel, handler: nil)
             alert.addAction(cancelBtn)
-            self.view?.window?.rootViewController?.presentViewController(alert, animated: true, completion: nil)
+            self.view?.window?.rootViewController?.present(alert, animated: true, completion: nil)
             return
         }
         print(mazeString)
         let bfs = BFSUtility.initWith(mazeString, playerPosition: mapPlayerPosition, finishPosition: mapFinishPosition)
         if !bfs.checkByBFS() {
-            let alert = UIAlertController(title: nil, message: "迷宫无法走通，请重新制作", preferredStyle: .Alert)
-            let cancelBtn = UIAlertAction(title: "确定", style: .Cancel, handler: nil)
+            let alert = UIAlertController(title: nil, message: "迷宫无法走通，请重新制作", preferredStyle: .alert)
+            let cancelBtn = UIAlertAction(title: "确定", style: .cancel, handler: nil)
             alert.addAction(cancelBtn)
-            self.view?.window?.rootViewController?.presentViewController(alert, animated: true, completion: nil)
+            self.view?.window?.rootViewController?.present(alert, animated: true, completion: nil)
         } else {
             MazeFileManager.sharedManager.writeToFile(mazeString, upload: uploadMaze, writeFileSuccess: {
                 showCenterToast("迷宫制作成功")
@@ -429,7 +429,7 @@ class MakeMapScene: SKScene {
             }, uploadFailure: { 
                 showCenterToast("迷宫上传失败")
             })
-            self.viewController.navigationController?.popViewControllerAnimated(true)
+            self.viewController.navigationController?.popViewController(animated: true)
         }
     }
 }
@@ -445,7 +445,7 @@ class BFSUtility: NSObject {
     var mazeString: String!
     
     
-    class func initWith(mazeString: String, playerPosition: MapNode, finishPosition: MapNode) -> BFSUtility {
+    class func initWith(_ mazeString: String, playerPosition: MapNode, finishPosition: MapNode) -> BFSUtility {
         let object = BFSUtility()
         object.mazeString = mazeString
         object.playerPosition = MapNode(x: 21 - playerPosition.y, y: playerPosition.x)
@@ -461,10 +461,10 @@ class BFSUtility: NSObject {
             for _ in 0..<32 {
                 visRow.append(0)
                 mapRow.append(mazeString.characters[charIndex])
-                charIndex = charIndex.successor()
+                charIndex = mazeString.index(after: charIndex)
             }
             if row < 21 {
-                charIndex = charIndex.successor()
+                charIndex = mazeString.index(after: charIndex)
             }
             vis.append(visRow)
             map.append(mapRow)
@@ -491,7 +491,7 @@ class BFSUtility: NSObject {
         return false
     }
     
-    func canGo(node: MapNode) -> Bool {
+    func canGo(_ node: MapNode) -> Bool {
         if node.x > 0 && node.x < 21 &&
             node.y > 0 && node.y < 31 &&
             map[node.x][node.y] != "x" &&

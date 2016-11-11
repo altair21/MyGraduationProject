@@ -40,7 +40,7 @@ struct PhysicsCategory {
     static let Spring: UInt32 = 0b100000 //32
 }
 
-func showCenterToast(str: String) {
-    UIView.currentView().makeToast(str, duration: 2.0, position: .Center)
+func showCenterToast(_ str: String) {
+    UIView.currentView().makeToast(str, duration: 2.0, position: .center)
 }
 

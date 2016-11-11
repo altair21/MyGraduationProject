@@ -19,13 +19,13 @@ class GameListTableViewCell: UITableViewCell {
         super.awakeFromNib()
     }
     
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
     }
     
-    func setupView(fileName fileName: String, filePath: String, superView: GameListViewController) {
+    func setupView(fileName: String, filePath: String, superView: GameListViewController) {
         if self.fileName != nil && fileName == self.fileName {
             return
         } else {
@@ -34,13 +34,13 @@ class GameListTableViewCell: UITableViewCell {
         self.superView = superView
         self.previewZone = UIView(frame: CGRect(x: 40, y: 0, width: 640, height: 440))
         self.BGView.alpha = 0
-        previewZone.layer.shadowColor = UIColor.blackColor().CGColor
+        previewZone.layer.shadowColor = UIColor.black.cgColor
         previewZone.layer.shadowOffset = CGSize(width: 4, height: 4)
         previewZone.layer.shadowOpacity = 0.8
         let previewZoneBG = UIImageView(image: UIImage(named: "background"))
-        previewZoneBG.contentMode = .ScaleToFill
+        previewZoneBG.contentMode = .scaleToFill
         previewZoneBG.frame = CGRect(x: 0, y: 0, width: 640, height: 440)
-        dispatch_async(dispatch_get_main_queue()) {
+        DispatchQueue.main.async {
             for view in self.BGView.subviews {
                 view.removeFromSuperview()
             }
@@ -50,7 +50,7 @@ class GameListTableViewCell: UITableViewCell {
         if superView.imageDic[self.fileName!] == nil {
             self.loadLevel(filePath) {
                 UIView.setAnimationsEnabled(true)
-                UIView.animateWithDuration(0.5, animations: { 
+                UIView.animate(withDuration: 0.5, animations: { 
                     self.BGView.alpha = 1.0
                 }, completion: { (res) in
                     self.snapshot()
@@ -59,14 +59,14 @@ class GameListTableViewCell: UITableViewCell {
         } else {
             replaceViewWithImage()
             UIView.setAnimationsEnabled(true)
-            UIView.animateWithDuration(0.5, animations: { 
+            UIView.animate(withDuration: 0.5, animations: { 
                 self.BGView.alpha = 1.0
             })
         }
     }
     
     func replaceViewWithImage() {
-        dispatch_async(dispatch_get_main_queue()) { 
+        DispatchQueue.main.async { 
             for view in self.BGView.subviews {
                 view.removeFromSuperview()
             }
@@ -79,9 +79,9 @@ class GameListTableViewCell: UITableViewCell {
     
     func snapshot() {
         if superView.imageDic[self.fileName!] == nil {
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), {
+            DispatchQueue.global(qos: .userInitiated).async(execute: {
                 UIGraphicsBeginImageContext(self.previewZone.bounds.size)
-                self.previewZone.layer.renderInContext(UIGraphicsGetCurrentContext()!)
+                self.previewZone.layer.render(in: UIGraphicsGetCurrentContext()!)
                 let image = UIGraphicsGetImageFromCurrentImageContext()
                 UIGraphicsEndImageContext()
                 self.superView.imageDic[self.fileName!] = image
@@ -90,14 +90,14 @@ class GameListTableViewCell: UITableViewCell {
         }
     }
     
-    func loadLevel(filePath: String, completion: () -> Void) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)) {
-            if let levelString = try? String(contentsOfFile: filePath, usedEncoding: nil) {
+    func loadLevel(_ filePath: String, completion: @escaping () -> Void) {
+        DispatchQueue.global(qos: .userInitiated).async {
+            if let levelString = try? String(contentsOfFile: filePath) {
                 var textures: [UIImageView] = []
-                let lines = levelString.componentsSeparatedByString("\n")
+                let lines = levelString.components(separatedBy: "\n")
                 
-                for (row, line) in lines.reverse().enumerate() {
-                    for (column, letter) in line.characters.enumerate() {
+                for (row, line) in lines.reversed().enumerated() {
+                    for (column, letter) in line.characters.enumerated() {
                         let position = CGPoint(x: vPreviewTextureLength * column,
                                                y: vPreviewTextureLength * (21 - row))
                         
@@ -131,13 +131,13 @@ class GameListTableViewCell: UITableViewCell {
                         textures.append(texture)
                     }
                 }
-                dispatch_async(dispatch_get_main_queue(), { 
+                DispatchQueue.main.async(execute: { 
                     for texture in textures {
                         self.previewZone.addSubview(texture)
                     }
                 })
             }
-            dispatch_async(dispatch_get_main_queue()) {
+            DispatchQueue.main.async {
                 UIView.setAnimationsEnabled(true)
                 completion()
             }

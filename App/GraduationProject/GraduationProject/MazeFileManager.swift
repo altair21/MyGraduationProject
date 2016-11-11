@@ -10,44 +10,44 @@ import UIKit
 import Alamofire
 
 class MazeFileManager: NSObject {
-    private static let sharedInstance = MazeFileManager()
+    fileprivate static let sharedInstance = MazeFileManager()
     class var sharedManager: MazeFileManager {
         return sharedInstance
     }
     
-    let mazeFileManager: NSFileManager = NSFileManager.defaultManager()
+    let mazeFileManager: FileManager = FileManager.default
     let APIupload = serverAddress + "upload/"
     let APIgetList = serverAddress + "getList/"
     let APIdownload = serverAddress + "download/"
     let localFileDir = "/LocalFiles"
     let downloadFileDir = "/DownloadFiles"
     
-    func writeToFile(text: String, upload uploadFlag: Bool, writeFileSuccess: () -> Void, writeFileFailure: () -> Void, uploadSuccess: () -> Void, uploadFailure: () -> Void) -> Bool {
+    func writeToFile(_ text: String, upload uploadFlag: Bool, writeFileSuccess: @escaping () -> Void, writeFileFailure: @escaping () -> Void, uploadSuccess: @escaping () -> Void, uploadFailure: @escaping () -> Void) -> Bool {
         let directoryPath = getMazeFilesDirectory(isLocalFile: true)
-        if !mazeFileManager.fileExistsAtPath(directoryPath) {
-            try! mazeFileManager.createDirectoryAtPath(directoryPath, withIntermediateDirectories: true, attributes: nil)
+        if !mazeFileManager.fileExists(atPath: directoryPath) {
+            try! mazeFileManager.createDirectory(atPath: directoryPath, withIntermediateDirectories: true, attributes: nil)
         }
         
         var res = true
-        let date = NSDate()
-        let formatter = NSDateFormatter()
+        let date = Date()
+        let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
-        let dateStr = formatter.stringFromDate(date)
-        let preName = dateStr + " " + NSUUID().UUIDString
+        let dateStr = formatter.string(from: date)
+        let preName = dateStr + " " + UUID().uuidString
         let fileName = preName + ".txt"
         print(fileName)
-        let filePath = NSURL(fileURLWithPath: directoryPath).URLByAppendingPathComponent(fileName)
+        let filePath = URL(fileURLWithPath: directoryPath).appendingPathComponent(fileName)
         do {
-            try text.writeToURL(filePath, atomically: true, encoding: NSUTF8StringEncoding)
+            try text.write(to: filePath, atomically: true, encoding: String.Encoding.utf8)
             if !uploadFlag {
-                dispatch_async(dispatch_get_main_queue(), { 
+                DispatchQueue.main.async(execute: { 
                     writeFileSuccess()
                 })
             }
         } catch let error as NSError {
             print(error.description)
             res = false
-            dispatch_async(dispatch_get_main_queue(), { 
+            DispatchQueue.main.async(execute: { 
                 writeFileFailure()
             })
         }
@@ -61,8 +61,8 @@ class MazeFileManager: NSObject {
         return res
     }
     
-    func getLocalFilesList(isLocalDir isLocalDir: Bool) -> Array<String> {
-        let dirEnum = mazeFileManager.enumeratorAtPath(getMazeFilesDirectory(isLocalFile: isLocalDir))
+    func getLocalFilesList(isLocalDir: Bool) -> Array<String> {
+        let dirEnum = mazeFileManager.enumerator(atPath: getMazeFilesDirectory(isLocalFile: isLocalDir))
         var path = dirEnum?.nextObject()
         var resArr = Array<String>()
         while path != nil {
@@ -73,78 +73,128 @@ class MazeFileManager: NSObject {
         return resArr
     }
     
-    func getFileFullPath(fileName: String, isLocalFile localFile: Bool) -> String {
+    func getFileFullPath(_ fileName: String, isLocalFile localFile: Bool) -> String {
         return self.getMazeFilesDirectory(isLocalFile: localFile) + "/" + fileName
     }
     
     func getMazeFilesDirectory(isLocalFile localFile: Bool) -> String {
-        let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
+        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         var documentsDirectory = paths[0]
         if localFile {
             documentsDirectory = documentsDirectory + localFileDir
         } else {
             documentsDirectory = documentsDirectory + downloadFileDir
         }
-        if !mazeFileManager.fileExistsAtPath(documentsDirectory) {
-            try! mazeFileManager.createDirectoryAtPath(documentsDirectory, withIntermediateDirectories: true, attributes: nil)
+        if !mazeFileManager.fileExists(atPath: documentsDirectory) {
+            try! mazeFileManager.createDirectory(atPath: documentsDirectory, withIntermediateDirectories: true, attributes: nil)
         }
         return documentsDirectory
     }
     
-    func uploadFile(filePath path: NSURL, uploadSuccess: () -> Void, uploadFailure: () -> Void) {
-        Alamofire.upload(.POST, APIupload,
-            multipartFormData: { (multipartFormData) in
-                multipartFormData.appendBodyPart(fileURL: path, name: "headImg")
-        }) { (encodingResult) in
+    func uploadFile(filePath path: URL, uploadSuccess: @escaping () -> Void, uploadFailure: @escaping () -> Void) {
+        Alamofire.upload(multipartFormData: { (multipartFormDate) in
+            multipartFormDate.append(path, withName: "headImg")
+        }, to: APIupload) { (encodingResult) in
             switch encodingResult {
-            case .Success(let upload, _, _):
+            case .success(let upload, _, _):
                 upload.responseString(completionHandler: { (response) in
                     print(response)
-                    if response.description.rangeOfString("upload ok") != nil {
-                        dispatch_async(dispatch_get_main_queue(), { 
-                            uploadSuccess()
-                        })
-                    } else {
-                        dispatch_async(dispatch_get_main_queue(), { 
-                            uploadFailure()
-                        })
-                    }
+//                    if response.description.rangeOfString("upload ok") != nil {
+//                        dispatch_async(dispatch_get_main_queue(), {
+//                            uploadSuccess()
+//                        })
+//                    } else {
+//                        dispatch_async(dispatch_get_main_queue(), {
+//                            uploadFailure()
+//                        })
+//                    }
                 })
-            case .Failure(_):
-                dispatch_async(dispatch_get_main_queue(), { 
+            case .failure(_):
+                DispatchQueue.main.async {
                     uploadFailure()
-                })
+                }
+
             }
         }
+//        Alamofire.upload(.POST, APIupload,
+//            multipartFormData: { (multipartFormData) in
+//                multipartFormData.appendBodyPart(fileURL: path, name: "headImg")
+//        }) { (encodingResult) in
+//            switch encodingResult {
+//            case .Success(let upload, _, _):
+//                upload.responseString(completionHandler: { (response) in
+//                    print(response)
+//                    if response.description.rangeOfString("upload ok") != nil {
+//                        dispatch_async(dispatch_get_main_queue(), { 
+//                            uploadSuccess()
+//                        })
+//                    } else {
+//                        dispatch_async(dispatch_get_main_queue(), { 
+//                            uploadFailure()
+//                        })
+//                    }
+//                })
+//            case .Failure(_):
+//                dispatch_async(dispatch_get_main_queue(), { 
+//                    uploadFailure()
+//                })
+//            }
+//        }
     }
     
-    func getFileList(success: Result<AnyObject, NSError> -> Void, failure: NSError -> Void) {
-        Alamofire.request(.GET, APIgetList, parameters: nil)
-            .responseJSON { response in
+    func getFileList(_ success: @escaping (Result<Any>) -> Void, failure: @escaping (NSError) -> Void) {
+        var urlRequest = URLRequest(url: URL(string: APIgetList)!)
+        urlRequest.httpMethod = "GET"
+        Alamofire.request(urlRequest)
+            .responseJSON { (response) in
                 if response.result.error == nil {
-                    dispatch_async(dispatch_get_main_queue(), {
+                    DispatchQueue.main.async {
                         success(response.result)
-                    })
+                    }
                 } else {
-                    dispatch_async(dispatch_get_main_queue(), { 
-                        failure(response.result.error!)
-                    })
+                    DispatchQueue.main.async {
+                        failure(response.result.error as! NSError)
+                    }
                 }
+
         }
+//        Alamofire.request(.GET, APIgetList, parameters: nil)
+//            .responseJSON { response in
+//                if response.result.error == nil {
+//                    dispatch_async(dispatch_get_main_queue(), {
+//                        success(response.result)
+//                    })
+//                } else {
+//                    dispatch_async(dispatch_get_main_queue(), { 
+//                        failure(response.result.error!)
+//                    })
+//                }
+//        }
     }
     
-    func download(fileName: String) {
-        var resPath: NSURL!
+    func download(_ fileName: String) {
+        var resPath: URL!
         let requestURL = APIdownload + "?filename=" + fileName
-        Alamofire.download(.GET, requestURL,
-            destination: { (temporaryURL, response) in
-                
+        var urlRequest = URLRequest(url: URL(string: requestURL)!)
+        urlRequest.httpMethod = "GET"
+        let destination: DownloadRequest.DownloadFileDestination = { _, _ in
             let directoryURL = NSURL(fileURLWithPath: self.getMazeFilesDirectory(isLocalFile: false))
-            resPath = directoryURL.URLByAppendingPathComponent(fileName)
-            print(directoryURL.URLByAppendingPathComponent(fileName))
-            return resPath
-                
-        })
+            resPath = directoryURL.appendingPathComponent(fileName)
+            print(directoryURL.appendingPathComponent(fileName))
+            return (resPath, [.removePreviousFile, .createIntermediateDirectories])
+        }
+        Alamofire.download(urlRequest, to: destination).response {response in
+            print(response)
+        }
+//        Alamofire.download(.GET, requestURL,
+//            destination: { (temporaryURL, response) in
+//                
+//            let directoryURL = NSURL(fileURLWithPath: self.getMazeFilesDirectory(isLocalFile: false))
+//            resPath = directoryURL.URLByAppendingPathComponent(fileName)
+//            print(directoryURL.URLByAppendingPathComponent(fileName))
+//            return resPath
+//                
+//        })
     }
     
 }

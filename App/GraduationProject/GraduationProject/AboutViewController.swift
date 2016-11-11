@@ -17,9 +17,9 @@ class AboutViewController: UIViewController {
         backBtn.layer.cornerRadius = vMenuBtnCornerRadius
     }
 
-    @IBAction func backBtnTapped(sender: UIButton) {
-        UIView.transitionWithView(self.navigationController!.view, duration: 0.75, options: .TransitionFlipFromLeft, animations: { 
-            self.navigationController?.popViewControllerAnimated(false)
+    @IBAction func backBtnTapped(_ sender: UIButton) {
+        UIView.transition(with: self.navigationController!.view, duration: 0.75, options: .transitionFlipFromLeft, animations: { 
+            self.navigationController?.popViewController(animated: false)
         }, completion: nil)
     }
     
@@ -28,7 +28,7 @@ class AboutViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    override func prefersStatusBarHidden() -> Bool {
+    override var prefersStatusBarHidden : Bool {
         return true
     }
 }

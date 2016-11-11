@@ -42,17 +42,17 @@ class DynamicMaskSegmentSwitch: UIView {
     
     weak var delegate: DynamicMaskSegmentSwitchDelegate?
     
-    private let marginInset: CGFloat = 2.0
-    private var count: Int {
+    fileprivate let marginInset: CGFloat = 2.0
+    fileprivate var count: Int {
         set{ self.count = newValue }
         get{ return self.configure.items.count }
     }
-    private var eachItemWidth: CGFloat {
+    fileprivate var eachItemWidth: CGFloat {
         return self.bounds.width / CGFloat(count)
     }
-    private(set) var indicator = UIView()
-    private var selectedLabelsBaseView = UIView()
-    private var selectedLabelsMaskView = UIView()
+    fileprivate(set) var indicator = UIView()
+    fileprivate var selectedLabelsBaseView = UIView()
+    fileprivate var selectedLabelsMaskView = UIView()
     
     init(frame: CGRect, configure: DynamicMaskSegmentSwitchConfigure) {
         super.init(frame: frame)
@@ -67,12 +67,12 @@ class DynamicMaskSegmentSwitch: UIView {
         removeObserver(self, forKeyPath: "indicator.frame")
     }
     
-    override internal class func layerClass() -> AnyClass {
+    override internal class var layerClass : AnyClass {
         return RoundedLayer.self
     }
     
-    func switchToItem(index: Int) {
-        UIView.animateWithDuration(0.5, delay: 0.0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.5, options: [.BeginFromCurrentState, .CurveEaseInOut], animations: {
+    func switchToItem(_ index: Int) {
+        UIView.animate(withDuration: 0.5, delay: 0.0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.5, options: [.beginFromCurrentState, .curveEaseInOut], animations: {
             self.indicator.frame.origin = CGPoint(x: self.marginInset + CGFloat(index)*self.eachItemWidth, y: self.marginInset)
             }, completion: nil)
     }
@@ -95,7 +95,7 @@ class DynamicMaskSegmentSwitch: UIView {
 /// private
 extension DynamicMaskSegmentSwitch {
     
-    private func initialViews() {
+    fileprivate func initialViews() {
         
         backgroundColor = configure.highlightedColor
         
@@ -105,7 +105,7 @@ extension DynamicMaskSegmentSwitch {
             unselectedLabel.frame = CGRect(x: eachItemWidth*CGFloat(i), y: 0, width: eachItemWidth, height: bounds.height)
             unselectedLabel.text = item
             unselectedLabel.textColor = configure.normalColor
-            unselectedLabel.textAlignment = .Center
+            unselectedLabel.textAlignment = .center
             addSubview(unselectedLabel)
         }
         
@@ -113,10 +113,10 @@ extension DynamicMaskSegmentSwitch {
         indicator.frame = CGRect(x: marginInset, y: marginInset, width: eachItemWidth - marginInset*2, height: bounds.height - marginInset*2)
         indicator.backgroundColor = configure.normalColor
         addSubview(indicator)
-        addObserver(self, forKeyPath: "indicator.frame", options: .New, context: nil)
+        addObserver(self, forKeyPath: "indicator.frame", options: .new, context: nil)
         
         object_setClass(selectedLabelsMaskView.layer, RoundedLayer.self)
-        selectedLabelsMaskView.backgroundColor = .blackColor()
+        selectedLabelsMaskView.backgroundColor = .black
         
         selectedLabelsBaseView.frame = bounds
         selectedLabelsBaseView.layer.mask = selectedLabelsMaskView.layer
@@ -129,7 +129,7 @@ extension DynamicMaskSegmentSwitch {
             selectedLabel.frame = CGRect(x: eachItemWidth*CGFloat(i), y: 0, width: eachItemWidth, height: bounds.height)
             selectedLabel.text = item
             selectedLabel.textColor = configure.highlightedColor
-            selectedLabel.textAlignment = .Center
+            selectedLabel.textAlignment = .center
             selectedLabelsBaseView.addSubview(selectedLabel)
         }
         
@@ -140,9 +140,9 @@ extension DynamicMaskSegmentSwitch {
     }
     
     /// gesture actions
-    @objc private func handleTapGesture(gesture: UITapGestureRecognizer) {
+    @objc fileprivate func handleTapGesture(_ gesture: UITapGestureRecognizer) {
         
-        let location = gesture.locationInView(self)
+        let location = gesture.location(in: self)
         let index = Int(floor(location.x / eachItemWidth))
         if currentIndex == index {
             return
@@ -160,7 +160,7 @@ extension DynamicMaskSegmentSwitch {
 /// KVO
 extension DynamicMaskSegmentSwitch {
     
-    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "indicator.frame" {
             selectedLabelsMaskView.frame = indicator.frame
         }
@@ -169,5 +169,5 @@ extension DynamicMaskSegmentSwitch {
 }
 
 protocol DynamicMaskSegmentSwitchDelegate: class {
-    func switcher(switcher: DynamicMaskSegmentSwitch, didSelectAtIndex index: Int) -> Void
+    func switcher(_ switcher: DynamicMaskSegmentSwitch, didSelectAtIndex index: Int) -> Void
 }

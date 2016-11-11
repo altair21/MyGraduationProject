@@ -23,9 +23,9 @@ class MenuViewController: UIViewController {
         aboutBtn.layer.cornerRadius = vMenuBtnCornerRadius
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.navigationBarHidden = true
+        self.navigationController?.isNavigationBarHidden = true
     }
 
     override func didReceiveMemoryWarning() {
@@ -33,21 +33,21 @@ class MenuViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    override func prefersStatusBarHidden() -> Bool {
+    override var prefersStatusBarHidden : Bool {
         return true
     }
     
-    @IBAction func startGameTapped(sender: UIButton) {
+    @IBAction func startGameTapped(_ sender: UIButton) {
         pushToViewController(storyboardGameListViewController)
     }
     
-    @IBAction func aboutTapped(sender: UIButton) {
+    @IBAction func aboutTapped(_ sender: UIButton) {
         pushToViewController(storyboardAboutViewController)
     }
     
-    func pushToViewController(identifier: String) {
-        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier(identifier)
-        UIView.transitionWithView(self.navigationController!.view, duration: 0.75, options: .TransitionFlipFromRight, animations: { 
+    func pushToViewController(_ identifier: String) {
+        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: identifier)
+        UIView.transition(with: self.navigationController!.view, duration: 0.75, options: .transitionFlipFromRight, animations: { 
             self.navigationController?.pushViewController(vc, animated: false)
         }, completion: nil)
     }
