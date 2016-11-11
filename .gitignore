@@ -5,3 +5,4 @@ Server/src/AppServer/upload
 *.sqlite3
 App/builds/
 *.pyc
+node_modules/
