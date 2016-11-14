@@ -98,16 +98,9 @@ class MazeFileManager: NSObject {
             switch encodingResult {
             case .success(let upload, _, _):
                 upload.responseString(completionHandler: { (response) in
-                    print(response)
-//                    if response.description.rangeOfString("upload ok") != nil {
-//                        dispatch_async(dispatch_get_main_queue(), {
-//                            uploadSuccess()
-//                        })
-//                    } else {
-//                        dispatch_async(dispatch_get_main_queue(), {
-//                            uploadFailure()
-//                        })
-//                    }
+                    DispatchQueue.main.async {
+                        uploadSuccess()
+                    }
                 })
             case .failure(_):
                 DispatchQueue.main.async {
@@ -116,30 +109,6 @@ class MazeFileManager: NSObject {
 
             }
         }
-//        Alamofire.upload(.POST, APIupload,
-//            multipartFormData: { (multipartFormData) in
-//                multipartFormData.appendBodyPart(fileURL: path, name: "headImg")
-//        }) { (encodingResult) in
-//            switch encodingResult {
-//            case .Success(let upload, _, _):
-//                upload.responseString(completionHandler: { (response) in
-//                    print(response)
-//                    if response.description.rangeOfString("upload ok") != nil {
-//                        dispatch_async(dispatch_get_main_queue(), { 
-//                            uploadSuccess()
-//                        })
-//                    } else {
-//                        dispatch_async(dispatch_get_main_queue(), { 
-//                            uploadFailure()
-//                        })
-//                    }
-//                })
-//            case .Failure(_):
-//                dispatch_async(dispatch_get_main_queue(), { 
-//                    uploadFailure()
-//                })
-//            }
-//        }
     }
     
     func getFileList(_ success: @escaping (Result<Any>) -> Void, failure: @escaping (NSError) -> Void) {
@@ -158,24 +127,12 @@ class MazeFileManager: NSObject {
                 }
 
         }
-//        Alamofire.request(.GET, APIgetList, parameters: nil)
-//            .responseJSON { response in
-//                if response.result.error == nil {
-//                    dispatch_async(dispatch_get_main_queue(), {
-//                        success(response.result)
-//                    })
-//                } else {
-//                    dispatch_async(dispatch_get_main_queue(), { 
-//                        failure(response.result.error!)
-//                    })
-//                }
-//        }
     }
     
     func download(_ fileName: String) {
         var resPath: URL!
         let requestURL = APIdownload + "?filename=" + fileName
-        var urlRequest = URLRequest(url: URL(string: requestURL)!)
+        var urlRequest = URLRequest(url: URL(string: requestURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)!)
         urlRequest.httpMethod = "GET"
         let destination: DownloadRequest.DownloadFileDestination = { _, _ in
             let directoryURL = NSURL(fileURLWithPath: self.getMazeFilesDirectory(isLocalFile: false))
@@ -186,15 +143,6 @@ class MazeFileManager: NSObject {
         Alamofire.download(urlRequest, to: destination).response {response in
             print(response)
         }
-//        Alamofire.download(.GET, requestURL,
-//            destination: { (temporaryURL, response) in
-//                
-//            let directoryURL = NSURL(fileURLWithPath: self.getMazeFilesDirectory(isLocalFile: false))
-//            resPath = directoryURL.URLByAppendingPathComponent(fileName)
-//            print(directoryURL.URLByAppendingPathComponent(fileName))
-//            return resPath
-//                
-//        })
     }
     
 }

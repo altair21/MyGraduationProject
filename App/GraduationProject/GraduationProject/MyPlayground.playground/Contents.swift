@@ -2,9 +2,7 @@
 
 import UIKit
 
-var str = "Hello, playground"
-if str == "Hello, playground" {
-    print(1)
-} else {
-    print(2)
-}
+
+let str1 = "http://112.74.53.202:3001/download/?filename=2016-11-14 111.txt"
+let correct = str1.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+let url = URL(string: correct!)

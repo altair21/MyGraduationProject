@@ -67,37 +67,37 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
     
     func refreshRemoteFile(_ forceUpdate: Bool) {
         MazeFileManager.sharedManager.getFileList({ (result) in
-            print(result)
-//            if let JSON = result.value {
-//                if JSON["result"] as! String == "success" {
-//                    let tempArr: Array<String> = JSON["files"] as! Array
-//                    var updateFlag = false
-//                    for title in tempArr {
-//                        if !self.localMazeTitle.contains(title) {
-//                            self.remoteMazeTitle.append(title)
-//                            updateFlag = true
-//                            MazeFileManager.sharedManager.download(title)
-//                        }
-//                    }
-//                    
-//                    if forceUpdate {
-//                        showCenterToast("获取文件列表成功")
-//                    }
-//                    
-//                    //去重，原谅我用这么奇怪的姿势
-//                    let tempSet = Set(self.remoteMazeTitle)
-//                    self.remoteMazeTitle = Array(tempSet)
-//                    self.remoteMazeTitle.sortInPlace()
-//                    if updateFlag && self.switcher.currentIndex == 1 {
-//                        self.tableView.reloadData()
-//                    }
-//                } else {
-//                    if forceUpdate {
-//                        showCenterToast("获取文件列表失败")
-//                    }
-//                }
-////                print("JSON: \(JSON)")
-//            }
+            print(result.value)
+            if let JSON = result.value as! Dictionary<String, Any>? {
+                if (((JSON["result"] != nil) && JSON["result"] as! String == "success") || ((JSON["code"] != nil) && JSON["code"] as! Int == 200)) {
+                    let tempArr: Array<String> = JSON["files"] as! Array
+                    var updateFlag = false
+                    for title in tempArr {
+                        if !self.localMazeTitle.contains(title) {
+                            self.remoteMazeTitle.append(title)
+                            updateFlag = true
+                            MazeFileManager.sharedManager.download(title)
+                        }
+                    }
+                    
+                    if forceUpdate {
+                        showCenterToast("获取文件列表成功")
+                    }
+                    
+                    //去重，原谅我用这么奇怪的姿势
+                    let tempSet = Set(self.remoteMazeTitle)
+                    self.remoteMazeTitle = Array(tempSet)
+                    self.remoteMazeTitle.sort()
+                    if updateFlag && self.switcher.currentIndex == 1 {
+                        self.tableView.reloadData()
+                    }
+                } else {
+                    if forceUpdate {
+                        showCenterToast("获取文件列表失败")
+                    }
+                }
+                print("JSON: \(JSON)")
+            }
         }) { (error) in
             if forceUpdate {
                 showCenterToast("获取文件列表失败")
