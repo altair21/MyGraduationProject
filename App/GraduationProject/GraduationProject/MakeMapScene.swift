@@ -378,7 +378,7 @@ class MakeMapScene: SKScene {
             self.checkValidity(uploadMaze: true)
         }
         let discardBtn = UIAlertAction(title: "放弃并退出", style: .default) { (_) in
-            self.viewController.navigationController?.popViewController(animated: true)
+            _ = self.viewController.navigationController?.popViewController(animated: true)
         }
         let cancelBtn = UIAlertAction(title: "取消", style: .cancel, handler: nil)
         alert.addAction(okBtn)
@@ -420,7 +420,7 @@ class MakeMapScene: SKScene {
             alert.addAction(cancelBtn)
             self.view?.window?.rootViewController?.present(alert, animated: true, completion: nil)
         } else {
-            MazeFileManager.sharedManager.writeToFile(mazeString, upload: uploadMaze, writeFileSuccess: {
+            _ = MazeFileManager.sharedManager.writeToFile(mazeString, upload: uploadMaze, writeFileSuccess: {
                 showCenterToast("迷宫制作成功")
             }, writeFileFailure: {
                 showCenterToast("迷宫制作失败")
@@ -429,7 +429,7 @@ class MakeMapScene: SKScene {
             }, uploadFailure: { 
                 showCenterToast("迷宫上传失败")
             })
-            self.viewController.navigationController?.popViewController(animated: true)
+            _ = self.viewController.navigationController?.popViewController(animated: true)
         }
     }
 }

@@ -102,7 +102,7 @@ class GameViewController: UIViewController {
         topPanel.frame = CGRect(x: 0, y: 0, width: 1024, height: 64)
         self.view.addSubview(topPanel)
         self.view.addSubview(imageView)
-        self.navigationController?.popViewController(animated: false)
+        _ = self.navigationController?.popViewController(animated: false)
         gameListVC.view.addSubview(topPanel)
         gameListVC.view.addSubview(imageView)
         UIApplication.shared.beginIgnoringInteractionEvents()

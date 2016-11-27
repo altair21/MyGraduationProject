@@ -66,7 +66,7 @@ class MazeFileManager: NSObject {
         var path = dirEnum?.nextObject()
         var resArr = Array<String>()
         while path != nil {
-            print(path)
+            print(path!)
             resArr.append(path as! String)
             path = dirEnum?.nextObject()
         }
@@ -137,7 +137,6 @@ class MazeFileManager: NSObject {
         let destination: DownloadRequest.DownloadFileDestination = { _, _ in
             let directoryURL = NSURL(fileURLWithPath: self.getMazeFilesDirectory(isLocalFile: false))
             resPath = directoryURL.appendingPathComponent(fileName)
-            print(directoryURL.appendingPathComponent(fileName))
             return (resPath, [.removePreviousFile, .createIntermediateDirectories])
         }
         Alamofire.download(urlRequest, to: destination).response {response in

@@ -67,7 +67,7 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
     
     func refreshRemoteFile(_ forceUpdate: Bool) {
         MazeFileManager.sharedManager.getFileList({ (result) in
-            print(result.value)
+            print(result.value!)
             if let JSON = result.value as! Dictionary<String, Any>? {
                 if (((JSON["result"] != nil) && JSON["result"] as! String == "success") || ((JSON["code"] != nil) && JSON["code"] as! Int == 200)) {
                     let tempArr: Array<String> = JSON["files"] as! Array

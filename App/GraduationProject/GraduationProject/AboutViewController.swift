@@ -19,7 +19,7 @@ class AboutViewController: UIViewController {
 
     @IBAction func backBtnTapped(_ sender: UIButton) {
         UIView.transition(with: self.navigationController!.view, duration: 0.75, options: .transitionFlipFromLeft, animations: { 
-            self.navigationController?.popViewController(animated: false)
+            _ = self.navigationController?.popViewController(animated: false)
         }, completion: nil)
     }
     
