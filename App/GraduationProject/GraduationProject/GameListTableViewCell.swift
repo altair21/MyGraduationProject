@@ -33,7 +33,6 @@ class GameListTableViewCell: UITableViewCell {
         }
         self.superView = superView
         self.previewZone = UIView(frame: CGRect(x: 40, y: 0, width: 1024, height: 704))
-        self.BGView.alpha = 0
         previewZone.layer.shadowColor = UIColor.black.cgColor
         previewZone.layer.shadowOffset = CGSize(width: 4, height: 4)
         previewZone.layer.shadowOpacity = 0.8
@@ -48,6 +47,7 @@ class GameListTableViewCell: UITableViewCell {
             self.previewZone.addSubview(previewZoneBG)
         }
         if superView.imageDic[self.fileName!] == nil {
+            self.BGView.alpha = 0
             self.loadLevel(filePath) {
                 self.snapshot()
             }
