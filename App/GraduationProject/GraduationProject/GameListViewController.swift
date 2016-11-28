@@ -163,35 +163,42 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
         cell.snapshot()
         let rect = cell.previewZone.convert(cell.previewZone.bounds, to: self.view)
         let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: storyboardGameViewController) as! GameViewController
+        let image = UIImageView()
+        image.frame = CGRect(x: 0, y: 64, width: 1024, height: 704)
+        image.transform = CGAffineTransform(scaleX: 640 / 1024, y: 440 / 704)
+        image.center = CGPoint(x: rect.midX, y: rect.midY)
+        
+        let topPanel = UIImageView(image: UIImage(named: "top_panel"))
+        topPanel.frame = CGRect(x: 0, y: 64, width: 1024, height: 64)
+        topPanel.transform = CGAffineTransform(scaleX: 640 / 1024, y: 40 / 64)
+        topPanel.center = CGPoint(x: rect.midX, y: rect.origin.y + 20)
+        topPanel.alpha = 0
+        
+        self.view.addSubview(topPanel)
+        self.view.addSubview(image)
+        
         if switcher.currentIndex == 0 {
             vc.setMazeFile(MazeFileManager.sharedManager.getFileFullPath(self.localMazeTitle[(indexPath as NSIndexPath).item], isLocalFile: true), image: imageDic[localMazeTitle[(indexPath as NSIndexPath).item]]!,
                            position: rect, viewController: self)
+            image.image = imageDic[localMazeTitle[(indexPath as NSIndexPath).item]]
         } else {
             vc.setMazeFile(MazeFileManager.sharedManager.getFileFullPath(self.remoteMazeTitle[(indexPath as NSIndexPath).item], isLocalFile: false), image: imageDic[remoteMazeTitle[(indexPath as NSIndexPath).item]]!,
                            position: rect, viewController: self)
-        }
-        let image = UIImageView()
-        image.frame = rect
-        if switcher.currentIndex == 0 {
-            image.image = imageDic[localMazeTitle[(indexPath as NSIndexPath).item]]
-        } else {
             image.image = imageDic[remoteMazeTitle[(indexPath as NSIndexPath).item]]
         }
-        let topPanel = UIImageView(image: UIImage(named: "top_panel"))
-        topPanel.frame = rect
-        topPanel.alpha = 0
-        self.view.addSubview(topPanel)
-        self.view.addSubview(image)
-        UIView.animate(withDuration: 0.4, animations: {
-            image.frame = CGRect(x: 0, y: 64, width: 1024, height: 704)
-            topPanel.frame = CGRect(x: 0, y: 0, width: 1024, height: 64)
+        
+        UIView.animate(withDuration: 0.4, delay: 0.0, options: [], animations: {
+            image.transform = CGAffineTransform.identity
+            image.center = CGPoint(x: 512, y: 416)
+            topPanel.transform = CGAffineTransform.identity
+            topPanel.center = CGPoint(x: 512, y: 32)
             topPanel.alpha = 1
-        }, completion: { (res) in
+        }, completion: { _ in
             image.removeFromSuperview()
             topPanel.removeFromSuperview()
             self.navigationController?.pushViewController(vc, animated: false)
             UIApplication.shared.endIgnoringInteractionEvents()
-        }) 
+        })
     }
     
     override var prefersStatusBarHidden : Bool {
