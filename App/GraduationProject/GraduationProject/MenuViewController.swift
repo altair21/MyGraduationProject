@@ -41,13 +41,17 @@ class MenuViewController: UIViewController {
         pushToViewController(storyboardGameListViewController)
     }
     
+    @IBAction func makeMapTapped(_ sender: UIButton) {
+        pushToViewController(storyboardMakeMapViewController)
+    }
+    
     @IBAction func aboutTapped(_ sender: UIButton) {
         pushToViewController(storyboardAboutViewController)
     }
     
     func pushToViewController(_ identifier: String) {
         let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: identifier)
-        UIView.transition(with: self.navigationController!.view, duration: 0.75, options: .transitionFlipFromRight, animations: { 
+        UIView.transition(with: self.navigationController!.view, duration: 0.6, options: [.transitionCurlDown, .curveEaseIn], animations: {
             self.navigationController?.pushViewController(vc, animated: false)
         }, completion: nil)
     }
