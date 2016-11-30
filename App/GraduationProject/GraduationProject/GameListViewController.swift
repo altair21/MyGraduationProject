@@ -76,7 +76,6 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
                         if !self.localMazeTitle.contains(title) {
                             self.remoteMazeTitle.append(title)
                             updateFlag = true
-                            MazeFileManager.sharedManager.download(title)
                         }
                     }
                     
@@ -90,6 +89,17 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
                     self.remoteMazeTitle.sort()
                     if updateFlag && self.switcher.currentIndex == 1 {
                         self.tableView.reloadData()
+                    }
+                    
+                    if self.remoteMazeTitle.count > 0 {
+                        if self.remoteDoge.isHidden == false {
+                            UIView.animate(withDuration: 0.4, animations: {
+                                self.remoteDoge.alpha = 0.0
+                            }, completion: { _ in
+                                self.remoteDoge.isHidden = true
+                                self.remoteDoge.alpha = 1.0
+                            })
+                        }
                     }
                 } else {
                     if forceUpdate {
@@ -150,9 +160,16 @@ class GameListViewController: UIViewController, UITableViewDataSource, UITableVi
                            filePath: MazeFileManager.sharedManager.getFileFullPath(self.localMazeTitle[(indexPath as NSIndexPath).item], isLocalFile: true),
                            superView: self)
         } else {
-            cell.setupView(fileName: self.remoteMazeTitle[(indexPath as NSIndexPath).item],
-                           filePath: MazeFileManager.sharedManager.getFileFullPath(self.remoteMazeTitle[(indexPath as NSIndexPath).item], isLocalFile: false),
-                           superView: self)
+            MazeFileManager.sharedManager.download(self.remoteMazeTitle[(indexPath as NSIndexPath).item], completion:  {
+                cell.setupView(fileName: self.remoteMazeTitle[(indexPath as NSIndexPath).item],
+                               filePath: MazeFileManager.sharedManager.getFileFullPath(self.remoteMazeTitle[(indexPath as NSIndexPath).item], isLocalFile: false),
+                               superView: self)
+            }, failure: {
+                tableView.beginUpdates()
+                tableView.deleteRows(at: [indexPath], with: .middle)
+                tableView.endUpdates()
+            })
+            
         }
         return cell
     }

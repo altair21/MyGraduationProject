@@ -35,7 +35,6 @@ class MazeFileManager: NSObject {
         let dateStr = formatter.string(from: date)
         let preName = dateStr + " " + UUID().uuidString
         let fileName = preName + ".txt"
-        print(fileName)
         let filePath = URL(fileURLWithPath: directoryPath).appendingPathComponent(fileName)
         do {
             try text.write(to: filePath, atomically: true, encoding: String.Encoding.utf8)
@@ -45,7 +44,7 @@ class MazeFileManager: NSObject {
                 })
             }
         } catch let error as NSError {
-            print(error.description)
+            print("error: \(error.description)")
             res = false
             DispatchQueue.main.async(execute: { 
                 writeFileFailure()
@@ -66,7 +65,6 @@ class MazeFileManager: NSObject {
         var path = dirEnum?.nextObject()
         var resArr = Array<String>()
         while path != nil {
-            print(path!)
             resArr.append(path as! String)
             path = dirEnum?.nextObject()
         }
@@ -129,18 +127,27 @@ class MazeFileManager: NSObject {
         }
     }
     
-    func download(_ fileName: String) {
+    func download(_ fileName: String, completion: @escaping ()->Void, failure: @escaping ()->Void) {
         var resPath: URL!
+        let directoryURL = NSURL(fileURLWithPath: self.getMazeFilesDirectory(isLocalFile: false))
+        resPath = directoryURL.appendingPathComponent(fileName)
+        
+        if mazeFileManager.fileExists(atPath: resPath.absoluteString) {
+            completion()
+        }
+        
         let requestURL = APIdownload + "?filename=" + fileName
         var urlRequest = URLRequest(url: URL(string: requestURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)!)
         urlRequest.httpMethod = "GET"
         let destination: DownloadRequest.DownloadFileDestination = { _, _ in
-            let directoryURL = NSURL(fileURLWithPath: self.getMazeFilesDirectory(isLocalFile: false))
-            resPath = directoryURL.appendingPathComponent(fileName)
             return (resPath, [.removePreviousFile, .createIntermediateDirectories])
         }
         Alamofire.download(urlRequest, to: destination).response {response in
-            print(response)
+            if response.response?.statusCode == 200 {
+                completion()
+            } else {
+                failure()
+            }
         }
     }
     
